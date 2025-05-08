@@ -1,8 +1,8 @@
-
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Box, Cylinder, Grid, Text, Html } from '@react-three/drei';
 import { useDataSimulation } from '@/hooks/useDataSimulation';
+import * as THREE from 'three';
 
 const Machine = ({ 
   position, 
@@ -11,7 +11,8 @@ const Machine = ({
   status = "running", 
   efficiency = 100 
 }) => {
-  const meshRef = useRef();
+  // Properly type the ref to be a THREE.Mesh object
+  const meshRef = useRef<THREE.Mesh>(null);
   
   // Animate based on status
   useFrame(() => {
