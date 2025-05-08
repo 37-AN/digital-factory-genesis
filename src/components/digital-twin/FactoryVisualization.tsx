@@ -20,6 +20,17 @@ interface ConveyorProps {
   width?: number;
 }
 
+// Define the machine data structure to type-check the simulation data
+interface MachineData {
+  name: string;
+  status: 'running' | 'idle' | 'error';
+  efficiency: number;
+}
+
+interface SimulationData {
+  machines: MachineData[];
+}
+
 const Machine = ({ 
   position, 
   color = "#60a5fa", 
@@ -108,23 +119,26 @@ interface FactoryProps {
 }
 
 const Factory = ({ running = false }: FactoryProps) => {
-  const { data } = useDataSimulation(() => {
+  const { data } = useDataSimulation<SimulationData>(() => {
     return {
       machines: [
-        { name: "Assembly", status: "running", efficiency: Math.floor(Math.random() * 20) + 80 },
-        { name: "Welding", status: Math.random() > 0.1 ? "running" : "idle", efficiency: Math.floor(Math.random() * 30) + 70 },
-        { name: "Testing", status: Math.random() > 0.15 ? "running" : "error", efficiency: Math.floor(Math.random() * 40) + 60 },
-        { name: "Packaging", status: "running", efficiency: Math.floor(Math.random() * 15) + 85 }
+        { name: "Assembly", status: "running" as const, efficiency: Math.floor(Math.random() * 20) + 80 },
+        { name: "Welding", status: Math.random() > 0.1 ? "running" as const : "idle" as const, efficiency: Math.floor(Math.random() * 30) + 70 },
+        { name: "Testing", status: Math.random() > 0.15 ? "running" as const : "error" as const, efficiency: Math.floor(Math.random() * 40) + 60 },
+        { name: "Packaging", status: "running" as const, efficiency: Math.floor(Math.random() * 15) + 85 }
       ]
     };
   }, { interval: 3000, enabled: running });
 
-  const machines = data?.machines || [
+  // Define typed default machines
+  const defaultMachines: MachineData[] = [
     { name: "Assembly", status: "idle", efficiency: 0 },
     { name: "Welding", status: "idle", efficiency: 0 },
     { name: "Testing", status: "idle", efficiency: 0 },
     { name: "Packaging", status: "idle", efficiency: 0 }
   ];
+
+  const machines = data?.machines || defaultMachines;
 
   return (
     <>
