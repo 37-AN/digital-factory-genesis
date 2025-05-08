@@ -1,7 +1,8 @@
 
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Box, Cylinder, Grid, Text, Html } from '@react-three/drei';
+import { OrbitControls, Cylinder, Grid, Text } from '@react-three/drei';
+import { Html } from '@react-three/drei';
 import { useDataSimulation } from '@/hooks/useDataSimulation';
 import * as THREE from 'three';
 
@@ -65,20 +66,25 @@ const Machine = ({
       </Cylinder>
       
       {/* Main machine body */}
-      <Box args={[2, 1, 1]} ref={meshRef}>
+      <mesh ref={meshRef}>
+        <boxGeometry args={[2, 1, 1]} />
         <meshStandardMaterial color={color} />
-      </Box>
+      </mesh>
       
       {/* Status indicator */}
       <Cylinder 
         args={[0.1, 0.1, 0.3, 8]} 
         position={[0, 0.8, 0]}
       >
-        <meshStandardMaterial color={statusColor} emissive={statusColor} emissiveIntensity={0.5} />
+        <meshStandardMaterial 
+          color={statusColor} 
+          emissive={statusColor} 
+          emissiveIntensity={0.5} 
+        />
       </Cylinder>
       
       {/* Label */}
-      <Html position={[0, 1.5, 0]}>
+      <Html position={[0, 1.5, 0]} transform>
         <div className="bg-white dark:bg-factory-blue px-2 py-1 rounded-md text-xs shadow-md">
           <p className="font-bold">{name}</p>
           <p className="text-xs opacity-80">Efficiency: {efficiency}%</p>
@@ -170,7 +176,7 @@ const Factory = ({ running = false }: FactoryProps) => {
       <Machine position={machinePositions[2]} name={machines[2].name} status={running ? machines[2].status : "idle"} efficiency={machines[2].efficiency} color="#10b981" />
       <Machine position={machinePositions[3]} name={machines[3].name} status={running ? machines[3].status : "idle"} efficiency={machines[3].efficiency} color="#f59e0b" />
       
-      {/* Conveyors - Using native Three.js geometries instead of drei components */}
+      {/* Conveyors */}
       <Conveyor startPos={machinePositions[0]} endPos={machinePositions[1]} />
       <Conveyor startPos={machinePositions[1]} endPos={machinePositions[2]} />
       <Conveyor startPos={machinePositions[2]} endPos={machinePositions[3]} />
