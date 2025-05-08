@@ -104,13 +104,11 @@ const Conveyor = ({ startPos, endPos, width = 0.5 }: ConveyorProps) => {
     endPos[0] - startPos[0]
   );
   
-  // Create a proper THREE.Vector3 for position instead of array
-  const position = new THREE.Vector3(centerX, centerY, centerZ);
-  
   return (
     <Box 
       args={[length, 0.1, width]} 
-      position={position}
+      // Fix: Use an array instead of Vector3 since @react-three/drei Box expects array positions
+      position={[centerX, centerY, centerZ]}
       rotation={[0, angle, 0]}
     >
       <meshStandardMaterial color="#94a3b8" />
@@ -173,7 +171,7 @@ const Factory = ({ running = false }: FactoryProps) => {
       <Machine position={machinePositions[2]} name={machines[2].name} status={running ? machines[2].status : "idle"} efficiency={machines[2].efficiency} color="#10b981" />
       <Machine position={machinePositions[3]} name={machines[3].name} status={running ? machines[3].status : "idle"} efficiency={machines[3].efficiency} color="#f59e0b" />
       
-      {/* Conveyors - Use typed positions */}
+      {/* Conveyors - We need to use array position format consistently */}
       <Conveyor startPos={machinePositions[0]} endPos={machinePositions[1]} />
       <Conveyor startPos={machinePositions[1]} endPos={machinePositions[2]} />
       <Conveyor startPos={machinePositions[2]} endPos={machinePositions[3]} />
