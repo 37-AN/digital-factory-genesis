@@ -5,13 +5,28 @@ import { OrbitControls, Box, Cylinder, Grid, Text, Html } from '@react-three/dre
 import { useDataSimulation } from '@/hooks/useDataSimulation';
 import * as THREE from 'three';
 
+// Define TypeScript interfaces for component props
+interface MachineProps {
+  position: [number, number, number];
+  color?: string;
+  name: string;
+  status?: 'running' | 'idle' | 'error';
+  efficiency?: number;
+}
+
+interface ConveyorProps {
+  startPos: [number, number, number];
+  endPos: [number, number, number];
+  width?: number;
+}
+
 const Machine = ({ 
   position, 
   color = "#60a5fa", 
   name, 
   status = "running", 
   efficiency = 100 
-}) => {
+}: MachineProps) => {
   // Properly type the ref to be a THREE.Mesh object
   const meshRef = useRef<THREE.Mesh>(null);
   
@@ -29,7 +44,7 @@ const Machine = ({
   }, [status]);
   
   return (
-    <group position={[position[0], position[1], position[2]]}>
+    <group position={position}>
       {/* Base cylinder */}
       <Cylinder 
         args={[1, 1, 0.2, 32]} 
@@ -62,24 +77,19 @@ const Machine = ({
   );
 };
 
-// Fix the Conveyor component to properly handle position arrays
-const Conveyor = ({ startPos, endPos, width = 0.5 }) => {
-  // Ensure positions are arrays with three values
-  const start = Array.isArray(startPos) ? startPos : [0, 0, 0];
-  const end = Array.isArray(endPos) ? endPos : [0, 0, 0];
-  
+const Conveyor = ({ startPos, endPos, width = 0.5 }: ConveyorProps) => {
   // Calculate the center position and rotation for the conveyor
-  const centerX = (start[0] + end[0]) / 2;
-  const centerZ = (start[2] + end[2]) / 2;
+  const centerX = (startPos[0] + endPos[0]) / 2;
+  const centerZ = (startPos[2] + endPos[2]) / 2;
   
   const length = Math.sqrt(
-    Math.pow(end[0] - start[0], 2) + 
-    Math.pow(end[2] - start[2], 2)
+    Math.pow(endPos[0] - startPos[0], 2) + 
+    Math.pow(endPos[2] - startPos[2], 2)
   );
   
   const angle = Math.atan2(
-    end[2] - start[2],
-    end[0] - start[0]
+    endPos[2] - startPos[2],
+    endPos[0] - startPos[0]
   );
   
   return (
@@ -93,7 +103,11 @@ const Conveyor = ({ startPos, endPos, width = 0.5 }) => {
   );
 };
 
-const Factory = ({ running = false }) => {
+interface FactoryProps {
+  running?: boolean;
+}
+
+const Factory = ({ running = false }: FactoryProps) => {
   const { data } = useDataSimulation(() => {
     return {
       machines: [
@@ -133,7 +147,7 @@ const Factory = ({ running = false }) => {
       <Machine position={[2, 0, 0]} name={machines[2].name} status={running ? machines[2].status : "idle"} efficiency={machines[2].efficiency} color="#10b981" />
       <Machine position={[6, 0, 0]} name={machines[3].name} status={running ? machines[3].status : "idle"} efficiency={machines[3].efficiency} color="#f59e0b" />
       
-      {/* Conveyors - Fix by ensuring positions are properly formatted arrays */}
+      {/* Conveyors - Use typed arrays for positions */}
       <Conveyor startPos={[-6, 0, 0]} endPos={[-2, 0, 0]} />
       <Conveyor startPos={[-2, 0, 0]} endPos={[2, 0, 0]} />
       <Conveyor startPos={[2, 0, 0]} endPos={[6, 0, 0]} />
@@ -141,7 +155,11 @@ const Factory = ({ running = false }) => {
   );
 };
 
-const FactoryVisualization = ({ running = false }) => {
+interface FactoryVisualizationProps {
+  running?: boolean;
+}
+
+const FactoryVisualization = ({ running = false }: FactoryVisualizationProps) => {
   return (
     <div className="h-full w-full">
       <Canvas camera={{ position: [0, 5, 10], fov: 50 }}>
