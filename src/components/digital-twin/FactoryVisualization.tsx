@@ -1,3 +1,4 @@
+
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Box, Cylinder, Grid, Text, Html } from '@react-three/drei';
@@ -28,7 +29,7 @@ const Machine = ({
   }, [status]);
   
   return (
-    <group position={position}>
+    <group position={[position[0], position[1], position[2]]}>
       {/* Base cylinder */}
       <Cylinder 
         args={[1, 1, 0.2, 32]} 
@@ -127,7 +128,7 @@ const Factory = ({ running = false }) => {
       <Machine position={[2, 0, 0]} name={machines[2].name} status={running ? machines[2].status : "idle"} efficiency={machines[2].efficiency} color="#10b981" />
       <Machine position={[6, 0, 0]} name={machines[3].name} status={running ? machines[3].status : "idle"} efficiency={machines[3].efficiency} color="#f59e0b" />
       
-      {/* Conveyors */}
+      {/* Conveyors - Fix by ensuring positions are properly formatted arrays */}
       <Conveyor startPos={[-6, 0, 0]} endPos={[-2, 0, 0]} />
       <Conveyor startPos={[-2, 0, 0]} endPos={[2, 0, 0]} />
       <Conveyor startPos={[2, 0, 0]} endPos={[6, 0, 0]} />
