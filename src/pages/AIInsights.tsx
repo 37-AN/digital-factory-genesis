@@ -3,7 +3,7 @@ import React from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Header from '../components/dashboard/Header';
 import AiInsights from '../components/dashboard/AiInsights';
-import { BarChart, LineChart, PieChart } from 'recharts';
+import { BarChart, LineChart, PieChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Bar, Area, Pie, Cell } from 'recharts';
 import { useDataSimulation } from '@/hooks/useDataSimulation';
 import { 
   generateProductionMetrics, 
@@ -90,14 +90,14 @@ const AIInsightsPage = () => {
                               <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
                             </linearGradient>
                           </defs>
-                          <BarChart.XAxis dataKey="name" />
-                          <BarChart.YAxis />
-                          <BarChart.CartesianGrid strokeDasharray="3 3" />
-                          <BarChart.Tooltip />
-                          <BarChart.Legend />
-                          <BarChart.Bar dataKey="efficiency" fill="url(#colorEfficiency)" name="Efficiency" />
-                          <BarChart.Bar dataKey="output" fill="url(#colorOutput)" name="Output" />
-                          <BarChart.Bar dataKey="quality" fill="url(#colorQuality)" name="Quality" />
+                          <XAxis dataKey="name" />
+                          <YAxis />
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <Tooltip />
+                          <Legend />
+                          <Bar dataKey="efficiency" fill="url(#colorEfficiency)" name="Efficiency" />
+                          <Bar dataKey="output" fill="url(#colorOutput)" name="Output" />
+                          <Bar dataKey="quality" fill="url(#colorQuality)" name="Quality" />
                         </BarChart>
                       </ChartContainer>
                     )}
@@ -138,11 +138,11 @@ const AIInsightsPage = () => {
                               <stop offset="95%" stopColor="#f59e0b" stopOpacity={0}/>
                             </linearGradient>
                           </defs>
-                          <LineChart.XAxis dataKey="name" />
-                          <LineChart.YAxis />
-                          <LineChart.CartesianGrid strokeDasharray="3 3" />
-                          <LineChart.Tooltip />
-                          <LineChart.Area type="monotone" dataKey="value" stroke="#f59e0b" fillOpacity={1} fill="url(#colorEnergy)" name="Energy Usage (kWh)" />
+                          <XAxis dataKey="name" />
+                          <YAxis />
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <Tooltip />
+                          <Area type="monotone" dataKey="value" stroke="#f59e0b" fillOpacity={1} fill="url(#colorEnergy)" name="Energy Usage (kWh)" />
                         </LineChart>
                       </ChartContainer>
                     )}
@@ -174,7 +174,7 @@ const AIInsightsPage = () => {
                           <ChartTooltip
                             content={<ChartTooltipContent />}
                           />
-                          <PieChart.Pie
+                          <Pie
                             data={qualityData || []}
                             cx="50%"
                             cy="50%"
@@ -186,9 +186,9 @@ const AIInsightsPage = () => {
                             label={({name, percent}) => `${name}: ${(percent * 100).toFixed(0)}%`}
                           >
                             {qualityData?.map((entry, index) => (
-                              <PieChart.Cell key={`cell-${index}`} fill={chartConfig[entry.name as keyof typeof chartConfig]?.color || '#8884d8'} />
+                              <Cell key={`cell-${index}`} fill={chartConfig[entry.name as keyof typeof chartConfig]?.color || '#8884d8'} />
                             ))}
-                          </PieChart.Pie>
+                          </Pie>
                         </PieChart>
                       </ChartContainer>
                     )}

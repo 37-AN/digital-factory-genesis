@@ -1,4 +1,3 @@
-
 import { ChartConfig } from "@/components/ui/chart";
 
 // Define types for different chart data structures
@@ -193,7 +192,6 @@ export const generateKpiData = () => {
 export const chartConfig: ChartConfig = {
   efficiency: {
     label: "Efficiency",
-    color: "#10b981", // green-500
     theme: {
       light: "#10b981",
       dark: "#10b981"
@@ -201,7 +199,6 @@ export const chartConfig: ChartConfig = {
   },
   output: {
     label: "Output",
-    color: "#3b82f6", // blue-500
     theme: {
       light: "#3b82f6",
       dark: "#60a5fa"
@@ -209,7 +206,6 @@ export const chartConfig: ChartConfig = {
   },
   quality: {
     label: "Quality",
-    color: "#8b5cf6", // violet-500
     theme: {
       light: "#8b5cf6",
       dark: "#a78bfa"
@@ -217,7 +213,6 @@ export const chartConfig: ChartConfig = {
   },
   energy: {
     label: "Energy",
-    color: "#f59e0b", // amber-500
     theme: {
       light: "#f59e0b",
       dark: "#fbbf24"
@@ -225,7 +220,6 @@ export const chartConfig: ChartConfig = {
   },
   temperature: {
     label: "Temperature",
-    color: "#ef4444", // red-500
     theme: {
       light: "#ef4444", 
       dark: "#f87171"
@@ -233,7 +227,6 @@ export const chartConfig: ChartConfig = {
   },
   Passed: {
     label: "Passed",
-    color: "#22c55e", // green-500
     theme: {
       light: "#22c55e",
       dark: "#4ade80"
@@ -241,7 +234,6 @@ export const chartConfig: ChartConfig = {
   },
   "Minor Issues": {
     label: "Minor Issues",
-    color: "#f59e0b", // amber-500
     theme: {
       light: "#f59e0b",
       dark: "#fbbf24"
@@ -249,7 +241,6 @@ export const chartConfig: ChartConfig = {
   },
   "Major Issues": {
     label: "Major Issues",
-    color: "#ef4444", // red-500
     theme: {
       light: "#ef4444",
       dark: "#f87171"
