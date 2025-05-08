@@ -1,16 +1,60 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Header from '../components/dashboard/Header';
 import KpiCard from '../components/dashboard/KpiCard';
 import { Database, FileCheck, FileSearch, Shield, ShieldCheck } from 'lucide-react';
 import { useDataSimulation } from '@/hooks/useDataSimulation';
 import { generateBlockchainTransactions } from '@/utils/dataSimulation';
+import { toast } from "@/components/ui/use-toast";
 
 const Blockchain = () => {
+  const [productId, setProductId] = useState('');
   const { data: transactions, loading } = useDataSimulation(() => generateBlockchainTransactions(5), { 
     interval: 15000 
   });
+
+  const handleViewTransactionDetails = (txId) => {
+    toast({
+      title: "Transaction Details",
+      description: `Viewing details for transaction ${txId}`
+    });
+    // In a real app, this would open a modal or navigate to a transaction details page
+  };
+
+  const handleVerifyProduct = (e) => {
+    e.preventDefault();
+    if (!productId.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Please enter a valid product ID",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    toast({
+      title: "Product Verification",
+      description: `Verifying product with ID: ${productId}`
+    });
+    // In a real app, this would trigger API call to verify the product
+  };
+
+  const handleScanQR = () => {
+    toast({
+      title: "QR Scanner",
+      description: "QR scanner would open in a complete implementation"
+    });
+    // In a real app, this would open the device camera to scan a QR code
+  };
+
+  const handleDeployContract = () => {
+    toast({
+      title: "Contract Deployment",
+      description: "Smart contract deployment wizard would open in a complete implementation"
+    });
+    // In a real app, this would open a smart contract deployment wizard
+  };
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-factory-blue-dark text-gray-900 dark:text-gray-100">
@@ -111,7 +155,12 @@ const Blockchain = () => {
                             <span className="text-sm font-mono">{tx.block}</span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-factory-teal">
-                            <button className="hover:text-factory-teal-dark transition-colors">View Details</button>
+                            <button 
+                              className="hover:text-factory-teal-dark transition-colors"
+                              onClick={() => handleViewTransactionDetails(tx.id)}
+                            >
+                              View Details
+                            </button>
                           </td>
                         </tr>
                       ))
@@ -139,25 +188,35 @@ const Blockchain = () => {
                       Verify product authenticity and view manufacturing history by entering a product ID or scanning a QR code.
                     </p>
                     
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Product ID or Serial Number
-                      </label>
-                      <div className="flex">
-                        <input 
-                          type="text" 
-                          placeholder="Enter product ID" 
-                          className="flex-1 px-3 py-2 border border-gray-300 dark:border-factory-blue-light rounded-l-md shadow-sm bg-white dark:bg-factory-blue focus:outline-none focus:ring-factory-teal focus:border-factory-teal"
-                        />
-                        <button className="px-4 py-2 bg-factory-teal text-white rounded-r-md hover:bg-factory-teal-dark transition-colors">
-                          <FileSearch className="h-5 w-5" />
-                        </button>
+                    <form onSubmit={handleVerifyProduct}>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                          Product ID or Serial Number
+                        </label>
+                        <div className="flex">
+                          <input 
+                            type="text" 
+                            placeholder="Enter product ID" 
+                            value={productId}
+                            onChange={e => setProductId(e.target.value)}
+                            className="flex-1 px-3 py-2 border border-gray-300 dark:border-factory-blue-light rounded-l-md shadow-sm bg-white dark:bg-factory-blue focus:outline-none focus:ring-factory-teal focus:border-factory-teal"
+                          />
+                          <button 
+                            type="submit"
+                            className="px-4 py-2 bg-factory-teal text-white rounded-r-md hover:bg-factory-teal-dark transition-colors"
+                          >
+                            <FileSearch className="h-5 w-5" />
+                          </button>
+                        </div>
                       </div>
-                    </div>
+                    </form>
                     
                     <div className="text-center mt-6">
                       <p className="text-sm text-gray-500 dark:text-gray-400">Or scan QR code</p>
-                      <button className="mt-2 px-4 py-2 border border-gray-300 dark:border-factory-blue-light rounded-md shadow-sm bg-white dark:bg-factory-blue hover:bg-gray-50 dark:hover:bg-factory-blue-light text-gray-700 dark:text-gray-300 transition-colors">
+                      <button 
+                        className="mt-2 px-4 py-2 border border-gray-300 dark:border-factory-blue-light rounded-md shadow-sm bg-white dark:bg-factory-blue hover:bg-gray-50 dark:hover:bg-factory-blue-light text-gray-700 dark:text-gray-300 transition-colors"
+                        onClick={handleScanQR}
+                      >
                         Scan QR Code
                       </button>
                     </div>
@@ -249,7 +308,10 @@ const Blockchain = () => {
                     </div>
                     
                     <div className="mt-4">
-                      <button className="w-full px-3 py-2 bg-factory-teal text-white rounded-md hover:bg-factory-teal-dark transition-colors">
+                      <button 
+                        className="w-full px-3 py-2 bg-factory-teal text-white rounded-md hover:bg-factory-teal-dark transition-colors"
+                        onClick={handleDeployContract}
+                      >
                         Deploy New Contract
                       </button>
                     </div>

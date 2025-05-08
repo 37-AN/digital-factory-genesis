@@ -5,10 +5,12 @@ import Header from '../components/dashboard/Header';
 import KpiCard from '../components/dashboard/KpiCard';
 import { AreaChart, BarChart, LineChart, PieChart, ResponsiveContainer, Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line, Pie, Cell } from 'recharts';
 import { BarChart as BarChartIcon, Search, Filter, Download } from 'lucide-react';
+import { toast } from "@/components/ui/use-toast";
 
 const Analytics = () => {
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState('30d');
+  const [searchProduct, setSearchProduct] = useState('');
   
   useEffect(() => {
     // Simulate loading data
@@ -57,6 +59,52 @@ const Analytics = () => {
     { month: 'May', consumption: 190 },
   ];
 
+  const handleDateRangeChange = (range) => {
+    setDateRange(range);
+    toast({
+      title: "Date Range Changed",
+      description: `Changed time period to ${range === '7d' ? '7 days' : range === '30d' ? '30 days' : range === '90d' ? '90 days' : 'Custom range'}`
+    });
+    // In a real app, this would trigger data reloading for the selected date range
+  };
+
+  const handleFilterData = () => {
+    toast({
+      title: "Filter Applied",
+      description: "Data filter options would open in a complete implementation"
+    });
+    // In a real app, this would open a filter modal
+  };
+
+  const handleExportData = () => {
+    toast({
+      title: "Exporting Data",
+      description: "Data export options would open in a complete implementation"
+    });
+    // In a real app, this would trigger CSV/Excel export or open an export options modal
+  };
+
+  const handleGenerateReport = () => {
+    toast({
+      title: "Report Generation",
+      description: "Generating detailed analytics report for the selected data"
+    });
+    // In a real app, this would trigger report generation
+  };
+
+  const handleSearchProducts = (e) => {
+    e.preventDefault();
+    if (!searchProduct.trim()) {
+      return;
+    }
+
+    toast({
+      title: "Searching Products",
+      description: `Searching for products matching: ${searchProduct}`
+    });
+    // In a real app, this would filter product data based on the search query
+  };
+
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-factory-blue-dark text-gray-900 dark:text-gray-100">
       <Sidebar />
@@ -79,7 +127,7 @@ const Analytics = () => {
                       ? 'bg-factory-teal text-white' 
                       : 'bg-white dark:bg-factory-blue text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-factory-blue-light'
                   }`}
-                  onClick={() => setDateRange('7d')}
+                  onClick={() => handleDateRangeChange('7d')}
                 >
                   7d
                 </button>
@@ -89,7 +137,7 @@ const Analytics = () => {
                       ? 'bg-factory-teal text-white' 
                       : 'bg-white dark:bg-factory-blue text-gray-700 dark:text-gray-300 border-y border-gray-300 dark:border-factory-blue-light'
                   }`}
-                  onClick={() => setDateRange('30d')}
+                  onClick={() => handleDateRangeChange('30d')}
                 >
                   30d
                 </button>
@@ -99,7 +147,7 @@ const Analytics = () => {
                       ? 'bg-factory-teal text-white' 
                       : 'bg-white dark:bg-factory-blue text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-factory-blue-light'
                   }`}
-                  onClick={() => setDateRange('90d')}
+                  onClick={() => handleDateRangeChange('90d')}
                 >
                   90d
                 </button>
@@ -109,18 +157,24 @@ const Analytics = () => {
                       ? 'bg-factory-teal text-white' 
                       : 'bg-white dark:bg-factory-blue text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-factory-blue-light'
                   }`}
-                  onClick={() => setDateRange('custom')}
+                  onClick={() => handleDateRangeChange('custom')}
                 >
                   Custom
                 </button>
               </div>
               
               <div className="flex gap-2">
-                <button className="px-3 py-1 text-sm bg-white dark:bg-factory-blue border border-gray-300 dark:border-factory-blue-light rounded-md flex items-center text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-factory-blue-light transition-colors">
+                <button 
+                  className="px-3 py-1 text-sm bg-white dark:bg-factory-blue border border-gray-300 dark:border-factory-blue-light rounded-md flex items-center text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-factory-blue-light transition-colors"
+                  onClick={handleFilterData}
+                >
                   <Filter className="h-4 w-4 mr-1" />
                   Filter
                 </button>
-                <button className="px-3 py-1 text-sm bg-white dark:bg-factory-blue border border-gray-300 dark:border-factory-blue-light rounded-md flex items-center text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-factory-blue-light transition-colors">
+                <button 
+                  className="px-3 py-1 text-sm bg-white dark:bg-factory-blue border border-gray-300 dark:border-factory-blue-light rounded-md flex items-center text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-factory-blue-light transition-colors"
+                  onClick={handleExportData}
+                >
                   <Download className="h-4 w-4 mr-1" />
                   Export
                 </button>
@@ -348,15 +402,20 @@ const Analytics = () => {
             <div className="border-b dark:border-factory-blue-light p-4 bg-gray-50 dark:bg-factory-blue-light flex justify-between items-center">
               <h2 className="font-semibold">Detailed Product Analysis</h2>
               <div className="flex items-center">
-                <div className="relative mr-2">
+                <form onSubmit={handleSearchProducts} className="relative mr-2">
                   <Search className="h-4 w-4 absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input 
                     type="text" 
                     placeholder="Search products" 
+                    value={searchProduct}
+                    onChange={(e) => setSearchProduct(e.target.value)}
                     className="pl-8 pr-4 py-1 text-sm border border-gray-300 dark:border-factory-blue-light rounded-md shadow-sm bg-white dark:bg-factory-blue focus:outline-none focus:ring-factory-teal focus:border-factory-teal"
                   />
-                </div>
-                <button className="px-3 py-1 text-sm bg-factory-teal text-white rounded-md hover:bg-factory-teal-dark transition-colors">
+                </form>
+                <button 
+                  className="px-3 py-1 text-sm bg-factory-teal text-white rounded-md hover:bg-factory-teal-dark transition-colors"
+                  onClick={handleGenerateReport}
+                >
                   Generate Report
                 </button>
               </div>

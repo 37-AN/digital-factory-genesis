@@ -1,12 +1,14 @@
-
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Header from '../components/dashboard/Header';
 import KpiCard from '../components/dashboard/KpiCard';
 import { Key, FileText, Users, ShieldAlert, UserCheck } from 'lucide-react';
+import { toast } from "@/components/ui/use-toast";
 
 const Identity = () => {
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [verificationId, setVerificationId] = useState('');
   
   useEffect(() => {
     // Simulate loading data
@@ -24,6 +26,58 @@ const Identity = () => {
     { id: 'USR-004', name: 'Sarah Johnson', role: 'Maintenance Engineer', status: 'Inactive', lastLogin: '2 days ago', accessLevel: 'Maintenance' },
     { id: 'USR-005', name: 'David Wilson', role: 'Logistics Coordinator', status: 'Active', lastLogin: '1 day ago', accessLevel: 'Inventory' },
   ];
+
+  const handleAddUser = () => {
+    toast({
+      title: "Add User",
+      description: "User creation form would open in a complete implementation"
+    });
+    // In a real app, this would open a user creation modal or navigate to a user creation page
+  };
+
+  const handleEditUser = (userId) => {
+    toast({
+      title: "Edit User",
+      description: `Editing user ${userId}`
+    });
+    // In a real app, this would open a user edit modal or navigate to a user edit page
+  };
+
+  const handleDisableUser = (userId) => {
+    toast({
+      title: "Disable User",
+      description: `Disabling user ${userId}`,
+      variant: "destructive"
+    });
+    // In a real app, this would trigger an API call to disable the user
+  };
+
+  const handleVerifyIdentity = (e) => {
+    e.preventDefault();
+    if (!verificationId.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Please enter a valid ID or public key",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    toast({
+      title: "Identity Verification",
+      description: `Verifying identity for ${verificationId}`
+    });
+    // In a real app, this would trigger an API call to verify the identity
+  };
+
+  const handleSearchUsers = (e) => {
+    e.preventDefault();
+    toast({
+      title: "Search Users",
+      description: `Searching for users matching: ${searchQuery}`
+    });
+    // In a real app, this would filter the users list based on the search query
+  };
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-factory-blue-dark text-gray-900 dark:text-gray-100">
@@ -75,12 +129,19 @@ const Identity = () => {
               <div className="border-b dark:border-factory-blue-light p-4 bg-gray-50 dark:bg-factory-blue-light flex items-center justify-between">
                 <h2 className="font-semibold">User Registry</h2>
                 <div className="flex items-center">
-                  <input 
-                    type="text" 
-                    placeholder="Search users" 
-                    className="text-sm px-3 py-1 border border-gray-300 dark:border-factory-blue-light rounded-md shadow-sm bg-white dark:bg-factory-blue focus:outline-none focus:ring-factory-teal focus:border-factory-teal"
-                  />
-                  <button className="ml-2 px-3 py-1 bg-factory-teal text-white text-sm rounded-md hover:bg-factory-teal-dark transition-colors">
+                  <form onSubmit={handleSearchUsers}>
+                    <input 
+                      type="text" 
+                      placeholder="Search users" 
+                      value={searchQuery}
+                      onChange={e => setSearchQuery(e.target.value)}
+                      className="text-sm px-3 py-1 border border-gray-300 dark:border-factory-blue-light rounded-md shadow-sm bg-white dark:bg-factory-blue focus:outline-none focus:ring-factory-teal focus:border-factory-teal"
+                    />
+                  </form>
+                  <button 
+                    className="ml-2 px-3 py-1 bg-factory-teal text-white text-sm rounded-md hover:bg-factory-teal-dark transition-colors"
+                    onClick={handleAddUser}
+                  >
                     Add User
                   </button>
                 </div>
@@ -134,8 +195,18 @@ const Identity = () => {
                             <div className="text-sm text-gray-500 dark:text-gray-400">{user.lastLogin}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                            <button className="text-factory-teal hover:text-factory-teal-dark transition-colors mr-3">Edit</button>
-                            <button className="text-factory-danger hover:text-red-600 transition-colors">Disable</button>
+                            <button 
+                              className="text-factory-teal hover:text-factory-teal-dark transition-colors mr-3"
+                              onClick={() => handleEditUser(user.id)}
+                            >
+                              Edit
+                            </button>
+                            <button 
+                              className="text-factory-danger hover:text-red-600 transition-colors"
+                              onClick={() => handleDisableUser(user.id)}
+                            >
+                              Disable
+                            </button>
                           </td>
                         </tr>
                       ))
@@ -168,20 +239,27 @@ const Identity = () => {
                       </p>
                     </div>
                     
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        User ID or Public Key
-                      </label>
-                      <input 
-                        type="text" 
-                        placeholder="Enter ID or public key" 
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-factory-blue-light rounded-md shadow-sm bg-white dark:bg-factory-blue focus:outline-none focus:ring-factory-teal focus:border-factory-teal"
-                      />
-                    </div>
-                    
-                    <button className="w-full px-3 py-2 bg-factory-teal text-white rounded-md hover:bg-factory-teal-dark transition-colors">
-                      Verify Identity
-                    </button>
+                    <form onSubmit={handleVerifyIdentity}>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                          User ID or Public Key
+                        </label>
+                        <input 
+                          type="text" 
+                          placeholder="Enter ID or public key" 
+                          value={verificationId}
+                          onChange={e => setVerificationId(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-factory-blue-light rounded-md shadow-sm bg-white dark:bg-factory-blue focus:outline-none focus:ring-factory-teal focus:border-factory-teal"
+                        />
+                      </div>
+                      
+                      <button 
+                        type="submit"
+                        className="w-full mt-4 px-3 py-2 bg-factory-teal text-white rounded-md hover:bg-factory-teal-dark transition-colors"
+                      >
+                        Verify Identity
+                      </button>
+                    </form>
                     
                     <div className="mt-4 space-y-2">
                       <h3 className="text-sm font-medium border-b dark:border-factory-blue-light pb-2">Recent Activity</h3>
@@ -210,179 +288,6 @@ const Identity = () => {
                           </div>
                           <span className="text-xs text-gray-500 dark:text-gray-400">2h ago</span>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-factory-blue rounded-lg shadow">
-              <div className="border-b dark:border-factory-blue-light p-4 bg-gray-50 dark:bg-factory-blue-light">
-                <h2 className="font-semibold">Access Control Policies</h2>
-              </div>
-              <div className="p-4">
-                {loading ? (
-                  <div className="animate-pulse space-y-4">
-                    {Array(5).fill(0).map((_, index) => (
-                      <div key={index} className="flex justify-between items-center p-2 border-b dark:border-factory-blue-light">
-                        <div className="h-4 bg-gray-200 dark:bg-factory-blue-light rounded w-40"></div>
-                        <div className="h-6 bg-gray-200 dark:bg-factory-blue-light rounded w-16"></div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center p-2 border-b dark:border-factory-blue-light">
-                      <div>
-                        <span className="font-medium">System Administration</span>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Full system access and configuration</p>
-                      </div>
-                      <div>
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300 text-xs rounded-full">1 User</span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex justify-between items-center p-2 border-b dark:border-factory-blue-light">
-                      <div>
-                        <span className="font-medium">Production Management</span>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Manage production lines and scheduling</p>
-                      </div>
-                      <div>
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300 text-xs rounded-full">4 Users</span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex justify-between items-center p-2 border-b dark:border-factory-blue-light">
-                      <div>
-                        <span className="font-medium">Quality Control</span>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Access to quality systems and data</p>
-                      </div>
-                      <div>
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300 text-xs rounded-full">5 Users</span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex justify-between items-center p-2 border-b dark:border-factory-blue-light">
-                      <div>
-                        <span className="font-medium">Maintenance</span>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Equipment maintenance and repair access</p>
-                      </div>
-                      <div>
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300 text-xs rounded-full">7 Users</span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex justify-between items-center p-2">
-                      <div>
-                        <span className="font-medium">Inventory Management</span>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Raw material and product inventory</p>
-                      </div>
-                      <div>
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300 text-xs rounded-full">3 Users</span>
-                      </div>
-                    </div>
-                    
-                    <div className="pt-4 flex justify-end">
-                      <button className="px-3 py-2 bg-factory-teal text-white rounded-md hover:bg-factory-teal-dark transition-colors">
-                        Manage Policies
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            
-            <div className="bg-white dark:bg-factory-blue rounded-lg shadow">
-              <div className="border-b dark:border-factory-blue-light p-4 bg-gray-50 dark:bg-factory-blue-light">
-                <h2 className="font-semibold">Security Audit Log</h2>
-              </div>
-              <div className="p-4">
-                {loading ? (
-                  <div className="animate-pulse space-y-4">
-                    {Array(6).fill(0).map((_, index) => (
-                      <div key={index} className="flex items-start space-x-2 pb-3 border-b dark:border-factory-blue-light">
-                        <div className="h-8 w-8 bg-gray-200 dark:bg-factory-blue-light rounded"></div>
-                        <div className="space-y-2 flex-1">
-                          <div className="h-4 bg-gray-200 dark:bg-factory-blue-light rounded w-3/4"></div>
-                          <div className="h-3 bg-gray-200 dark:bg-factory-blue-light rounded w-1/2"></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="space-y-4 max-h-96 overflow-y-auto">
-                    <div className="flex items-start space-x-2 pb-3 border-b dark:border-factory-blue-light">
-                      <div className="bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-300 p-2 rounded-full">
-                        <UserCheck className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <p className="text-sm">
-                          <span className="font-medium">User Login</span> - John Smith logged in successfully
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Today, 10:23 AM | IP: 192.168.1.45</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-2 pb-3 border-b dark:border-factory-blue-light">
-                      <div className="bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300 p-2 rounded-full">
-                        <Key className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <p className="text-sm">
-                          <span className="font-medium">Access Granted</span> - Maria Rodriguez accessed Production Line Dashboard
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Today, 09:42 AM | IP: 192.168.1.28</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-2 pb-3 border-b dark:border-factory-blue-light">
-                      <div className="bg-yellow-100 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-300 p-2 rounded-full">
-                        <ShieldAlert className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <p className="text-sm">
-                          <span className="font-medium">Failed Login Attempt</span> - Multiple failed attempts for user Sarah Johnson
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Today, 08:17 AM | IP: 192.168.1.112</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-2 pb-3 border-b dark:border-factory-blue-light">
-                      <div className="bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300 p-2 rounded-full">
-                        <FileText className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <p className="text-sm">
-                          <span className="font-medium">Policy Update</span> - Robert Chen permissions modified
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Yesterday, 3:45 PM | IP: 192.168.1.87</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-2 pb-3 border-b dark:border-factory-blue-light">
-                      <div className="bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-300 p-2 rounded-full">
-                        <UserCheck className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <p className="text-sm">
-                          <span className="font-medium">User Login</span> - David Wilson logged in successfully
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Yesterday, 1:12 PM | IP: 192.168.1.56</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-2">
-                      <div className="bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-300 p-2 rounded-full">
-                        <ShieldAlert className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <p className="text-sm">
-                          <span className="font-medium">Unauthorized Access Attempt</span> - Someone tried to access admin panel
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">2 days ago, 11:53 PM | IP: 203.45.67.89</p>
                       </div>
                     </div>
                   </div>

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Header from '../components/dashboard/Header';
 import AiInsights from '../components/dashboard/AiInsights';
@@ -14,6 +14,7 @@ import {
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { toast } from "@/components/ui/use-toast";
 
 const AIInsightsPage = () => {
   const { 
@@ -30,6 +31,27 @@ const AIInsightsPage = () => {
     data: qualityData, 
     loading: loadingQuality 
   } = useDataSimulation(generateQualityMetrics, { interval: 8000 });
+
+  const handleScheduleMaintenance = () => {
+    toast({
+      title: "Maintenance Scheduled",
+      description: "Maintenance for Assembly Station #3 has been scheduled."
+    });
+  };
+
+  const handleDetailedAnalysis = () => {
+    toast({
+      title: "Detailed Analysis",
+      description: "Opening detailed vibration pattern analysis for Assembly Station #3."
+    });
+  };
+
+  const handleViewRecommendation = () => {
+    toast({
+      title: "Energy Optimization Recommendation",
+      description: "Viewing detailed recommendation for 12% energy reduction opportunity."
+    });
+  };
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-factory-blue-dark text-gray-900 dark:text-gray-100">
@@ -223,10 +245,16 @@ const AIInsightsPage = () => {
                       potential failure within 72 hours (89% confidence).
                     </p>
                     <div className="mt-4 flex">
-                      <button className="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm">
+                      <button 
+                        className="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm"
+                        onClick={handleScheduleMaintenance}
+                      >
                         Schedule Maintenance
                       </button>
-                      <button className="ml-2 px-3 py-1 border border-amber-600 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/30 rounded-md text-sm">
+                      <button 
+                        className="ml-2 px-3 py-1 border border-amber-600 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/30 rounded-md text-sm"
+                        onClick={handleDetailedAnalysis}
+                      >
                         Detailed Analysis
                       </button>
                     </div>
@@ -244,7 +272,10 @@ const AIInsightsPage = () => {
                       during non-peak hours without affecting product quality.
                     </p>
                     <div className="mt-4">
-                      <button className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm">
+                      <button 
+                        className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
+                        onClick={handleViewRecommendation}
+                      >
                         View Recommendation
                       </button>
                     </div>

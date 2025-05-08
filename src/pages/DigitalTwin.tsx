@@ -1,13 +1,19 @@
+
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Header from '../components/dashboard/Header';
 import KpiCard from '../components/dashboard/KpiCard';
 import { Cpu, HelpCircle, Layers, Play, RefreshCcw, RotateCcw, Server } from 'lucide-react';
 import FactoryVisualization from '../components/digital-twin/FactoryVisualization';
+import { toast } from "@/components/ui/use-toast";
 
 const DigitalTwin = () => {
   const [loading, setLoading] = useState(true);
   const [activeSimulation, setActiveSimulation] = useState(false);
+  const [simulationSpeed, setSimulationSpeed] = useState(10);
+  const [qualityThreshold, setQualityThreshold] = useState(95);
+  const [maintenanceFrequency, setMaintenanceFrequency] = useState("Regular Schedule");
+  const [powerMode, setPowerMode] = useState("Standard Operation");
   
   useEffect(() => {
     // Simulate loading data
@@ -17,6 +23,122 @@ const DigitalTwin = () => {
     
     return () => clearTimeout(timer);
   }, []);
+
+  const handleSimulationToggle = () => {
+    const newState = !activeSimulation;
+    setActiveSimulation(newState);
+    
+    if (newState) {
+      toast({
+        title: "Simulation Started",
+        description: "Digital twin simulation is now running."
+      });
+    } else {
+      toast({
+        title: "Simulation Stopped",
+        description: "Digital twin simulation has been halted."
+      });
+    }
+  };
+
+  const handleResetParameters = () => {
+    setSimulationSpeed(10);
+    setQualityThreshold(95);
+    setMaintenanceFrequency("Regular Schedule");
+    setPowerMode("Standard Operation");
+    
+    toast({
+      title: "Parameters Reset",
+      description: "All simulation parameters have been reset to defaults."
+    });
+  };
+
+  const handleLoadScenario = (scenario) => {
+    if (activeSimulation) {
+      toast({
+        title: "Cannot Load Scenario",
+        description: "Please stop the current simulation before loading a new scenario.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    let params = {
+      speed: 100,
+      quality: 95,
+      maintenance: "Regular Schedule",
+      power: "Standard Operation"
+    };
+
+    switch (scenario) {
+      case "energy":
+        params = {
+          speed: 85,
+          quality: 94,
+          maintenance: "Extended Intervals",
+          power: "Energy Saving"
+        };
+        break;
+      case "throughput":
+        params = {
+          speed: 140,
+          quality: 92,
+          maintenance: "Predictive Only",
+          power: "Maximum Performance"
+        };
+        break;
+      case "maintenance":
+        params = {
+          speed: 95,
+          quality: 97,
+          maintenance: "Predictive Only",
+          power: "Balanced"
+        };
+        break;
+    }
+
+    setSimulationSpeed(params.speed);
+    setQualityThreshold(params.quality);
+    setMaintenanceFrequency(params.maintenance);
+    setPowerMode(params.power);
+
+    toast({
+      title: "Scenario Loaded",
+      description: `The ${scenario === "energy" ? "Energy Optimization" : scenario === "throughput" ? "Maximum Throughput" : "Maintenance Schedule Optimization"} scenario has been loaded.`
+    });
+  };
+
+  const handleViewResults = (scenario) => {
+    toast({
+      title: "Viewing Results",
+      description: `Showing previous results for the ${scenario === "energy" ? "Energy Optimization" : scenario === "throughput" ? "Maximum Throughput" : "Maintenance Schedule Optimization"} scenario.`
+    });
+    // In a real app, this would open a modal or navigate to a results page
+  };
+
+  const handleAdvancedSettings = () => {
+    toast({
+      title: "Advanced Settings",
+      description: "Advanced configuration options would open in a modal dialog in a complete implementation."
+    });
+    // In a real app, this would open a modal with advanced settings
+  };
+
+  const handleSpeedChange = (e) => {
+    setSimulationSpeed(parseInt(e.target.value));
+  };
+
+  const handleQualityChange = (e) => {
+    setQualityThreshold(parseInt(e.target.value));
+  };
+
+  const handleMaintenanceChange = (e) => {
+    setMaintenanceFrequency(e.target.value);
+  };
+
+  const handlePowerChange = (e) => {
+    setPowerMode(e.target.value);
+  };
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-factory-blue-dark text-gray-900 dark:text-gray-100">
@@ -39,7 +161,7 @@ const DigitalTwin = () => {
                     ? "bg-red-500 hover:bg-red-600 text-white" 
                     : "bg-factory-teal hover:bg-factory-teal-dark text-white"
                 } transition-colors`}
-                onClick={() => setActiveSimulation(!activeSimulation)}
+                onClick={handleSimulationToggle}
               >
                 {activeSimulation ? (
                   <>
@@ -54,7 +176,10 @@ const DigitalTwin = () => {
                 )}
               </button>
               
-              <button className="px-4 py-2 rounded-md border border-gray-300 dark:border-factory-blue-light bg-white dark:bg-factory-blue hover:bg-gray-50 dark:hover:bg-factory-blue-light text-gray-700 dark:text-gray-200 transition-colors flex items-center">
+              <button 
+                className="px-4 py-2 rounded-md border border-gray-300 dark:border-factory-blue-light bg-white dark:bg-factory-blue hover:bg-gray-50 dark:hover:bg-factory-blue-light text-gray-700 dark:text-gray-200 transition-colors flex items-center"
+                onClick={handleResetParameters}
+              >
                 <RotateCcw className="h-4 w-4 mr-2" />
                 <span>Reset Parameters</span>
               </button>
@@ -71,7 +196,7 @@ const DigitalTwin = () => {
             />
             <KpiCard 
               title="Simulation Speed"
-              value="10x"
+              value={`${simulationSpeed}x`}
               icon={<RefreshCcw className="h-5 w-5" />}
               loading={loading}
               description="Real-time acceleration"
@@ -133,11 +258,12 @@ const DigitalTwin = () => {
                           type="range" 
                           min="50" 
                           max="150" 
-                          defaultValue="100"
+                          value={simulationSpeed}
+                          onChange={handleSpeedChange}
                           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-factory-blue-light" 
                           disabled={activeSimulation}
                         />
-                        <span className="ml-2 text-sm font-mono">100%</span>
+                        <span className="ml-2 text-sm font-mono">{simulationSpeed}%</span>
                       </div>
                     </div>
                     
@@ -148,11 +274,12 @@ const DigitalTwin = () => {
                           type="range" 
                           min="90" 
                           max="100" 
-                          defaultValue="95"
+                          value={qualityThreshold}
+                          onChange={handleQualityChange}
                           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-factory-blue-light" 
                           disabled={activeSimulation}
                         />
-                        <span className="ml-2 text-sm font-mono">95%</span>
+                        <span className="ml-2 text-sm font-mono">{qualityThreshold}%</span>
                       </div>
                     </div>
                     
@@ -161,6 +288,8 @@ const DigitalTwin = () => {
                       <select 
                         className="w-full px-3 py-2 border border-gray-300 dark:border-factory-blue-light rounded-md shadow-sm bg-white dark:bg-factory-blue focus:outline-none focus:ring-factory-teal focus:border-factory-teal text-sm"
                         disabled={activeSimulation}
+                        value={maintenanceFrequency}
+                        onChange={handleMaintenanceChange}
                       >
                         <option>Regular Schedule</option>
                         <option>Predictive Only</option>
@@ -174,6 +303,8 @@ const DigitalTwin = () => {
                       <select 
                         className="w-full px-3 py-2 border border-gray-300 dark:border-factory-blue-light rounded-md shadow-sm bg-white dark:bg-factory-blue focus:outline-none focus:ring-factory-teal focus:border-factory-teal text-sm"
                         disabled={activeSimulation}
+                        value={powerMode}
+                        onChange={handlePowerChange}
                       >
                         <option>Standard Operation</option>
                         <option>Energy Saving</option>
@@ -190,6 +321,7 @@ const DigitalTwin = () => {
                       <button 
                         className="w-full px-3 py-2 border border-gray-300 dark:border-factory-blue-light rounded-md shadow-sm bg-white dark:bg-factory-blue hover:bg-gray-50 dark:hover:bg-factory-blue-light text-gray-700 dark:text-gray-300 text-sm"
                         disabled={activeSimulation}
+                        onClick={handleAdvancedSettings}
                       >
                         Configure Advanced Settings
                       </button>
@@ -225,10 +357,14 @@ const DigitalTwin = () => {
                         <button 
                           className="px-3 py-1 bg-factory-teal text-white text-sm rounded hover:bg-factory-teal-dark transition-colors"
                           disabled={activeSimulation}
+                          onClick={() => handleLoadScenario('energy')}
                         >
                           Load Scenario
                         </button>
-                        <button className="px-3 py-1 border border-gray-300 dark:border-factory-blue-light text-sm rounded hover:bg-gray-50 dark:hover:bg-factory-blue-light transition-colors">
+                        <button 
+                          className="px-3 py-1 border border-gray-300 dark:border-factory-blue-light text-sm rounded hover:bg-gray-50 dark:hover:bg-factory-blue-light transition-colors"
+                          onClick={() => handleViewResults('energy')}
+                        >
                           View Results
                         </button>
                       </div>
@@ -241,10 +377,14 @@ const DigitalTwin = () => {
                         <button 
                           className="px-3 py-1 bg-factory-teal text-white text-sm rounded hover:bg-factory-teal-dark transition-colors"
                           disabled={activeSimulation}
+                          onClick={() => handleLoadScenario('throughput')}
                         >
                           Load Scenario
                         </button>
-                        <button className="px-3 py-1 border border-gray-300 dark:border-factory-blue-light text-sm rounded hover:bg-gray-50 dark:hover:bg-factory-blue-light transition-colors">
+                        <button 
+                          className="px-3 py-1 border border-gray-300 dark:border-factory-blue-light text-sm rounded hover:bg-gray-50 dark:hover:bg-factory-blue-light transition-colors"
+                          onClick={() => handleViewResults('throughput')}
+                        >
                           View Results
                         </button>
                       </div>
@@ -257,10 +397,14 @@ const DigitalTwin = () => {
                         <button 
                           className="px-3 py-1 bg-factory-teal text-white text-sm rounded hover:bg-factory-teal-dark transition-colors"
                           disabled={activeSimulation}
+                          onClick={() => handleLoadScenario('maintenance')}
                         >
                           Load Scenario
                         </button>
-                        <button className="px-3 py-1 border border-gray-300 dark:border-factory-blue-light text-sm rounded hover:bg-gray-50 dark:hover:bg-factory-blue-light transition-colors">
+                        <button 
+                          className="px-3 py-1 border border-gray-300 dark:border-factory-blue-light text-sm rounded hover:bg-gray-50 dark:hover:bg-factory-blue-light transition-colors"
+                          onClick={() => handleViewResults('maintenance')}
+                        >
                           View Results
                         </button>
                       </div>
