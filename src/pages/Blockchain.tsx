@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Header from '../components/dashboard/Header';
@@ -97,7 +98,7 @@ const Blockchain = () => {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className="text-sm text-gray-500 dark:text-gray-400">{tx.timestamp}</span>
                           </td>
-                          <td className={`px-6 py-4 whitespace-nowrap">
+                          <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                               ${tx.status === "Confirmed" 
                                 ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300"
