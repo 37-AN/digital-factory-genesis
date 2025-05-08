@@ -92,6 +92,7 @@ const Conveyor = ({ startPos, endPos, width = 0.5 }: ConveyorProps) => {
   // Calculate the center position and rotation for the conveyor
   const centerX = (startPos[0] + endPos[0]) / 2;
   const centerZ = (startPos[2] + endPos[2]) / 2;
+  const centerY = -0.4;  // Fixed Y position
   
   const length = Math.sqrt(
     Math.pow(endPos[0] - startPos[0], 2) + 
@@ -103,10 +104,13 @@ const Conveyor = ({ startPos, endPos, width = 0.5 }: ConveyorProps) => {
     endPos[0] - startPos[0]
   );
   
+  // Create a proper THREE.Vector3 for position instead of array
+  const position = new THREE.Vector3(centerX, centerY, centerZ);
+  
   return (
     <Box 
       args={[length, 0.1, width]} 
-      position={[centerX, -0.4, centerZ]}
+      position={position}
       rotation={[0, angle, 0]}
     >
       <meshStandardMaterial color="#94a3b8" />
@@ -140,6 +144,14 @@ const Factory = ({ running = false }: FactoryProps) => {
 
   const machines = data?.machines || defaultMachines;
 
+  // Define machine positions as proper tuples
+  const machinePositions: [number, number, number][] = [
+    [-6, 0, 0],
+    [-2, 0, 0],
+    [2, 0, 0],
+    [6, 0, 0]
+  ];
+
   return (
     <>
       {/* Floor */}
@@ -156,15 +168,15 @@ const Factory = ({ running = false }: FactoryProps) => {
       />
       
       {/* Factory machines */}
-      <Machine position={[-6, 0, 0]} name={machines[0].name} status={running ? machines[0].status : "idle"} efficiency={machines[0].efficiency} />
-      <Machine position={[-2, 0, 0]} name={machines[1].name} status={running ? machines[1].status : "idle"} efficiency={machines[1].efficiency} color="#8b5cf6" />
-      <Machine position={[2, 0, 0]} name={machines[2].name} status={running ? machines[2].status : "idle"} efficiency={machines[2].efficiency} color="#10b981" />
-      <Machine position={[6, 0, 0]} name={machines[3].name} status={running ? machines[3].status : "idle"} efficiency={machines[3].efficiency} color="#f59e0b" />
+      <Machine position={machinePositions[0]} name={machines[0].name} status={running ? machines[0].status : "idle"} efficiency={machines[0].efficiency} />
+      <Machine position={machinePositions[1]} name={machines[1].name} status={running ? machines[1].status : "idle"} efficiency={machines[1].efficiency} color="#8b5cf6" />
+      <Machine position={machinePositions[2]} name={machines[2].name} status={running ? machines[2].status : "idle"} efficiency={machines[2].efficiency} color="#10b981" />
+      <Machine position={machinePositions[3]} name={machines[3].name} status={running ? machines[3].status : "idle"} efficiency={machines[3].efficiency} color="#f59e0b" />
       
-      {/* Conveyors - Use typed arrays for positions */}
-      <Conveyor startPos={[-6, 0, 0]} endPos={[-2, 0, 0]} />
-      <Conveyor startPos={[-2, 0, 0]} endPos={[2, 0, 0]} />
-      <Conveyor startPos={[2, 0, 0]} endPos={[6, 0, 0]} />
+      {/* Conveyors - Use typed positions */}
+      <Conveyor startPos={machinePositions[0]} endPos={machinePositions[1]} />
+      <Conveyor startPos={machinePositions[1]} endPos={machinePositions[2]} />
+      <Conveyor startPos={machinePositions[2]} endPos={machinePositions[3]} />
     </>
   );
 };
