@@ -78,7 +78,7 @@ const Machine = ({
       </Cylinder>
       
       {/* Label */}
-      <Html position={[0, 1.5, 0]} center>
+      <Html position={[0, 1.5, 0]}>
         <div className="bg-white dark:bg-factory-blue px-2 py-1 rounded-md text-xs shadow-md">
           <p className="font-bold">{name}</p>
           <p className="text-xs opacity-80">Efficiency: {efficiency}%</p>
@@ -105,14 +105,13 @@ const Conveyor = ({ startPos, endPos, width = 0.5 }: ConveyorProps) => {
   );
   
   return (
-    <Box 
-      args={[length, 0.1, width]} 
-      // Fix: Use an array instead of Vector3 since @react-three/drei Box expects array positions
+    <mesh 
       position={[centerX, centerY, centerZ]}
       rotation={[0, angle, 0]}
     >
+      <boxGeometry args={[length, 0.1, width]} />
       <meshStandardMaterial color="#94a3b8" />
-    </Box>
+    </mesh>
   );
 };
 
@@ -171,7 +170,7 @@ const Factory = ({ running = false }: FactoryProps) => {
       <Machine position={machinePositions[2]} name={machines[2].name} status={running ? machines[2].status : "idle"} efficiency={machines[2].efficiency} color="#10b981" />
       <Machine position={machinePositions[3]} name={machines[3].name} status={running ? machines[3].status : "idle"} efficiency={machines[3].efficiency} color="#f59e0b" />
       
-      {/* Conveyors - We need to use array position format consistently */}
+      {/* Conveyors - Using native Three.js geometries instead of drei components */}
       <Conveyor startPos={machinePositions[0]} endPos={machinePositions[1]} />
       <Conveyor startPos={machinePositions[1]} endPos={machinePositions[2]} />
       <Conveyor startPos={machinePositions[2]} endPos={machinePositions[3]} />
