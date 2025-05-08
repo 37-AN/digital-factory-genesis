@@ -62,19 +62,24 @@ const Machine = ({
   );
 };
 
+// Fix the Conveyor component to properly handle position arrays
 const Conveyor = ({ startPos, endPos, width = 0.5 }) => {
+  // Ensure positions are arrays with three values
+  const start = Array.isArray(startPos) ? startPos : [0, 0, 0];
+  const end = Array.isArray(endPos) ? endPos : [0, 0, 0];
+  
   // Calculate the center position and rotation for the conveyor
-  const centerX = (startPos[0] + endPos[0]) / 2;
-  const centerZ = (startPos[2] + endPos[2]) / 2;
+  const centerX = (start[0] + end[0]) / 2;
+  const centerZ = (start[2] + end[2]) / 2;
   
   const length = Math.sqrt(
-    Math.pow(endPos[0] - startPos[0], 2) + 
-    Math.pow(endPos[2] - startPos[2], 2)
+    Math.pow(end[0] - start[0], 2) + 
+    Math.pow(end[2] - start[2], 2)
   );
   
   const angle = Math.atan2(
-    endPos[2] - startPos[2],
-    endPos[0] - startPos[0]
+    end[2] - start[2],
+    end[0] - start[0]
   );
   
   return (
