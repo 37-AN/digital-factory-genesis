@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,32 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom colors for our industrial UI
+				factory: {
+					blue: {
+						DEFAULT: '#1A2942',
+						light: '#2A3D5A',
+						dark: '#0F1B2E'
+					},
+					teal: {
+						DEFAULT: '#00A9A5',
+						light: '#1CBFBB',
+						dark: '#008C89'
+					},
+					amber: {
+						DEFAULT: '#FFA500',
+						light: '#FFB733',
+						dark: '#CC8400'
+					},
+					success: '#10B981',
+					warning: '#F59E0B',
+					danger: '#EF4444',
+					gray: {
+						light: '#F9FAFB',
+						DEFAULT: '#D1D5DB',
+						dark: '#4B5563'
+					}
 				}
 			},
 			borderRadius: {
@@ -84,11 +111,26 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-slow': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.5' }
+				},
+				'spin-slow': {
+					'0%': { transform: 'rotate(0deg)' },
+					'100%': { transform: 'rotate(360deg)' }
+				},
+				'fade-in': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-slow': 'pulse-slow 3s ease-in-out infinite',
+				'spin-slow': 'spin-slow 3s linear infinite',
+				'fade-in': 'fade-in 0.5s ease-out'
 			}
 		}
 	},
