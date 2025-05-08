@@ -1,7 +1,7 @@
 
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Cylinder, Grid, Text } from '@react-three/drei';
+import { OrbitControls, Grid } from '@react-three/drei';
 import { Html } from '@react-three/drei';
 import { useDataSimulation } from '@/hooks/useDataSimulation';
 import * as THREE from 'three';
@@ -58,12 +58,10 @@ const Machine = ({
   return (
     <group position={position}>
       {/* Base cylinder */}
-      <Cylinder 
-        args={[1, 1, 0.2, 32]} 
-        position={[0, -0.6, 0]}
-      >
+      <mesh position={[0, -0.6, 0]}>
+        <cylinderGeometry args={[1, 1, 0.2, 32]} />
         <meshStandardMaterial color="#475569" />
-      </Cylinder>
+      </mesh>
       
       {/* Main machine body */}
       <mesh ref={meshRef}>
@@ -72,16 +70,14 @@ const Machine = ({
       </mesh>
       
       {/* Status indicator */}
-      <Cylinder 
-        args={[0.1, 0.1, 0.3, 8]} 
-        position={[0, 0.8, 0]}
-      >
+      <mesh position={[0, 0.8, 0]}>
+        <cylinderGeometry args={[0.1, 0.1, 0.3, 8]} />
         <meshStandardMaterial 
           color={statusColor} 
           emissive={statusColor} 
           emissiveIntensity={0.5} 
         />
-      </Cylinder>
+      </mesh>
       
       {/* Label */}
       <Html position={[0, 1.5, 0]} transform>
