@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Header from '../components/dashboard/Header';
 import KpiCard from '../components/dashboard/KpiCard';
 import { Cpu, HelpCircle, Layers, Play, RefreshCcw, RotateCcw, Server } from 'lucide-react';
+import FactoryVisualization from '../components/digital-twin/FactoryVisualization';
 
 const DigitalTwin = () => {
   const [loading, setLoading] = useState(true);
@@ -101,23 +101,11 @@ const DigitalTwin = () => {
                   <span className="font-mono ml-1">{activeSimulation ? "00:15:47" : "00:00:00"}</span>
                 </div>
               </div>
-              <div className="p-4 h-96 flex items-center justify-center bg-gray-50 dark:bg-gray-900/30">
+              <div className="p-0 h-96 relative">
                 {loading ? (
                   <div className="animate-pulse w-full h-full bg-gray-200 dark:bg-factory-blue-light rounded"></div>
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center border border-dashed border-gray-300 dark:border-factory-blue-light rounded">
-                    <div className="text-center">
-                      <div className="bg-gray-100 dark:bg-factory-blue-light p-4 rounded-full inline-block mb-4">
-                        <Layers className="h-12 w-12 text-gray-400 dark:text-gray-500" />
-                      </div>
-                      <p className="text-lg font-medium text-gray-500 dark:text-gray-400">Digital Twin Visualization</p>
-                      <p className="text-sm text-gray-400 dark:text-gray-500 max-w-sm">
-                        {activeSimulation 
-                          ? "Simulation running. Connect to 3D visualization module to view real-time factory simulation." 
-                          : "Start a simulation to view the 3D digital twin of your factory in real-time."}
-                      </p>
-                    </div>
-                  </div>
+                  <FactoryVisualization running={activeSimulation} />
                 )}
               </div>
             </div>

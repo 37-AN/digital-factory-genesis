@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 interface SimulationOptions {
   interval?: number;
@@ -25,26 +25,39 @@ export function useDataSimulation<T>(
   
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
+  const generatorRef = useRef(dataGenerator);
+  
+  // Update the ref when the generator changes
+  useEffect(() => {
+    generatorRef.current = dataGenerator;
+  }, [dataGenerator]);
+  
+  const generateData = useCallback(() => {
+    return generatorRef.current();
+  }, []);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {
+      setLoading(false);
+      return;
+    }
     
     // Initial data load with delay to simulate API fetching
     const initialTimer = setTimeout(() => {
-      setData(dataGenerator());
+      setData(generateData());
       setLoading(false);
     }, initialDelay);
     
     // Set up interval for regular data updates
     const intervalTimer = setInterval(() => {
-      setData(dataGenerator());
+      setData(generateData());
     }, interval);
     
     return () => {
       clearTimeout(initialTimer);
       clearInterval(intervalTimer);
     };
-  }, [dataGenerator, interval, initialDelay, enabled]);
+  }, [generateData, interval, initialDelay, enabled]);
 
-  return { data, loading };
+  return { data, loading, refreshData: () => setData(generateData()) };
 }
