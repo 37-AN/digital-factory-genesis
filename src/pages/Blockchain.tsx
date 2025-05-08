@@ -1,29 +1,15 @@
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Header from '../components/dashboard/Header';
 import KpiCard from '../components/dashboard/KpiCard';
 import { Database, FileCheck, FileSearch, Shield, ShieldCheck } from 'lucide-react';
+import { useDataSimulation } from '@/hooks/useDataSimulation';
+import { generateBlockchainTransactions } from '@/utils/dataSimulation';
 
 const Blockchain = () => {
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    // Simulate loading data
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    
-    return () => clearTimeout(timer);
-  }, []);
-
-  const transactions = [
-    { id: '0x8a3e...5f4b', type: 'Product Verification', timestamp: '3 mins ago', status: 'Confirmed', block: '#14,532,187' },
-    { id: '0xb42f...9e7d', type: 'Machine Maintenance', timestamp: '27 mins ago', status: 'Confirmed', block: '#14,532,152' },
-    { id: '0x7c9a...1d3e', type: 'Batch Production', timestamp: '1 hour ago', status: 'Confirmed', block: '#14,532,093' },
-    { id: '0x3f5d...8c2a', type: 'Quality Control', timestamp: '2 hours ago', status: 'Confirmed', block: '#14,531,987' },
-    { id: '0xe12b...4f7a', type: 'Material Receipt', timestamp: '5 hours ago', status: 'Confirmed', block: '#14,531,752' },
-  ];
+  const { data: transactions, loading } = useDataSimulation(() => generateBlockchainTransactions(5), { 
+    interval: 15000 
+  });
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-factory-blue-dark text-gray-900 dark:text-gray-100">
@@ -100,7 +86,7 @@ const Blockchain = () => {
                         </tr>
                       ))
                     ) : (
-                      transactions.map((tx) => (
+                      transactions?.map((tx) => (
                         <tr key={tx.id}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className="font-mono text-sm">{tx.id}</span>
@@ -111,8 +97,12 @@ const Blockchain = () => {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className="text-sm text-gray-500 dark:text-gray-400">{tx.timestamp}</span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300">
+                          <td className={`px-6 py-4 whitespace-nowrap">
+                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                              ${tx.status === "Confirmed" 
+                                ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300"
+                                : "bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300"
+                              }`}>
                               {tx.status}
                             </span>
                           </td>

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Header from '../components/dashboard/Header';
 import KpiCard from '../components/dashboard/KpiCard';
@@ -7,18 +7,11 @@ import AiInsights from '../components/dashboard/AiInsights';
 import SystemArchitecture from '../components/dashboard/SystemArchitecture';
 import BlockchainIdentity from '../components/dashboard/BlockchainIdentity';
 import { BarChart, Activity, Database, Layers } from 'lucide-react';
+import { useDataSimulation } from '@/hooks/useDataSimulation';
+import { generateKpiData } from '@/utils/dataSimulation';
 
 const Index = () => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate loading data
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-    
-    return () => clearTimeout(timer);
-  }, []);
+  const { data: kpiData, loading } = useDataSimulation(generateKpiData, { interval: 8000 });
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-factory-blue-dark text-gray-900 dark:text-gray-100">
@@ -31,34 +24,34 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <KpiCard 
               title="Overall Equipment Effectiveness"
-              value="76.3%"
-              trend={2.1}
+              value={kpiData?.oee.value || "76.3%"}
+              trend={kpiData?.oee.trend || 2.1}
               icon={<BarChart className="h-5 w-5" />}
               loading={loading}
             />
             <KpiCard 
               title="Active Production Orders"
-              value="14"
-              trend={-1}
+              value={kpiData?.productionOrders.value || "14"}
+              trend={kpiData?.productionOrders.trend || -1}
               icon={<Activity className="h-5 w-5" />}
               loading={loading}
-              description="3 high priority"
+              description={kpiData?.productionOrders.description || "3 high priority"}
             />
             <KpiCard 
               title="Connected Machines"
-              value="28"
-              trend={0}
+              value={kpiData?.connectedMachines.value || "28"}
+              trend={kpiData?.connectedMachines.trend || 0}
               icon={<Database className="h-5 w-5" />}
               loading={loading}
-              description="All machines online"
+              description={kpiData?.connectedMachines.description || "All machines online"}
             />
             <KpiCard 
               title="Digital Twin Simulations"
-              value="3"
-              trend={1}
+              value={kpiData?.simulations.value || "3"}
+              trend={kpiData?.simulations.trend || 1}
               icon={<Layers className="h-5 w-5" />}
               loading={loading}
-              description="2 optimizations running"
+              description={kpiData?.simulations.description || "2 optimizations running"}
             />
           </div>
           
