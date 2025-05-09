@@ -77,7 +77,7 @@ const AiInsights = () => {
           <div className="bg-gray-50 dark:bg-factory-blue-light p-3 border-b dark:border-factory-blue-light">
             <h3 className="font-medium text-sm text-gray-700 dark:text-gray-300">Overall Equipment Effectiveness</h3>
           </div>
-          <div className="p-3 h-52">
+          <div className="p-3 h-44">
             {loading ? (
               <div className="h-full w-full flex items-center justify-center">
                 <div className="w-12 h-12 border-2 border-factory-teal border-t-transparent rounded-full animate-spin"></div>
@@ -91,8 +91,8 @@ const AiInsights = () => {
                         data={oeeChartData}
                         cx="50%"
                         cy="50%"
-                        innerRadius={40}
-                        outerRadius={60}
+                        innerRadius={35}
+                        outerRadius={50}
                         paddingAngle={2}
                         dataKey="value"
                         startAngle={90}
@@ -129,7 +129,7 @@ const AiInsights = () => {
           <div className="bg-gray-50 dark:bg-factory-blue-light p-3 border-b dark:border-factory-blue-light">
             <h3 className="font-medium text-sm text-gray-700 dark:text-gray-300">Equipment Temperature Prediction</h3>
           </div>
-          <div className="p-3 h-52">
+          <div className="p-3 h-44">
             {loading ? (
               <div className="h-full w-full flex items-center justify-center">
                 <div className="w-12 h-12 border-2 border-factory-teal border-t-transparent rounded-full animate-spin"></div>
@@ -155,8 +155,8 @@ const AiInsights = () => {
                     dataKey="actual" 
                     stroke="#00A9A5" 
                     strokeWidth={2}
-                    dot={{ r: 4 }}
-                    activeDot={{ r: 6 }}
+                    dot={{ r: 3 }}
+                    activeDot={{ r: 5 }}
                   />
                   <Line 
                     type="monotone" 
@@ -164,7 +164,7 @@ const AiInsights = () => {
                     stroke="#FFA500" 
                     strokeWidth={2}
                     strokeDasharray="5 5"
-                    dot={{ r: 4 }}
+                    dot={{ r: 3 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -180,7 +180,7 @@ const AiInsights = () => {
               {anomalies.length} Active
             </span>
           </div>
-          <div className="p-3 max-h-64 overflow-y-auto">
+          <div className="p-3 max-h-44 overflow-y-auto">
             {loading ? (
               <div className="space-y-3">
                 {[1, 2].map((_, idx) => (
@@ -223,7 +223,7 @@ const AiInsights = () => {
           <div className="bg-gray-50 dark:bg-factory-blue-light p-3 border-b dark:border-factory-blue-light">
             <h3 className="font-medium text-sm text-gray-700 dark:text-gray-300">AI Recommendations</h3>
           </div>
-          <div className="p-3 max-h-64 overflow-y-auto">
+          <div className="p-3 max-h-44 overflow-y-auto">
             {loading ? (
               <div className="space-y-3">
                 {[1, 2].map((_, idx) => (

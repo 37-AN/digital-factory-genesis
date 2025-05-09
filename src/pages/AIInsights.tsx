@@ -84,7 +84,7 @@ const AIInsightsPage = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-80">
+                  <div className="h-64">
                     {loadingProduction ? (
                       <div className="h-full w-full flex items-center justify-center">
                         <div className="h-32 w-32 rounded-md animate-pulse bg-gray-200 dark:bg-gray-700"></div>
@@ -93,7 +93,7 @@ const AIInsightsPage = () => {
                       <ChartContainer config={chartConfig}>
                         <BarChart
                           data={productionData || []}
-                          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                          margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
                         >
                           <ChartTooltip
                             content={<ChartTooltipContent />}
@@ -140,7 +140,7 @@ const AIInsightsPage = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-80">
+                  <div className="h-64">
                     {loadingEnergy ? (
                       <div className="h-full w-full flex items-center justify-center">
                         <div className="h-32 w-32 rounded-md animate-pulse bg-gray-200 dark:bg-gray-700"></div>
@@ -149,7 +149,7 @@ const AIInsightsPage = () => {
                       <ChartContainer config={chartConfig}>
                         <LineChart
                           data={energyData || []}
-                          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                          margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
                         >
                           <ChartTooltip
                             content={<ChartTooltipContent />}
@@ -185,14 +185,14 @@ const AIInsightsPage = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-80">
+                  <div className="h-64">
                     {loadingQuality ? (
                       <div className="h-full w-full flex items-center justify-center">
                         <div className="h-32 w-32 rounded-md animate-pulse bg-gray-200 dark:bg-gray-700"></div>
                       </div>
                     ) : (
                       <ChartContainer config={chartConfig}>
-                        <PieChart margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <PieChart margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
                           <ChartTooltip
                             content={<ChartTooltipContent />}
                           />
@@ -201,7 +201,7 @@ const AIInsightsPage = () => {
                             cx="50%"
                             cy="50%"
                             labelLine={false}
-                            outerRadius={80}
+                            outerRadius={60}
                             fill="#8884d8"
                             dataKey="value"
                             nameKey="name"
