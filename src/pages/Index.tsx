@@ -7,7 +7,7 @@ import AiInsights from '../components/dashboard/AiInsights';
 import SystemArchitecture from '../components/dashboard/SystemArchitecture';
 import BlockchainIdentity from '../components/dashboard/BlockchainIdentity';
 import EngineArchitecture from '../components/dashboard/EngineArchitecture';
-import { BarChart, Activity, Database, Layers } from 'lucide-react';
+import { BarChart, Activity, Database, Layers, Cpu, TrendingUp } from 'lucide-react';
 import { useDataSimulation } from '@/hooks/useDataSimulation';
 import { generateKpiData } from '@/utils/dataSimulation';
 import { Link } from 'react-router-dom';
@@ -39,22 +39,24 @@ const Index = () => {
               loading={loading}
               description={kpiData?.productionOrders.description || "3 high priority"}
             />
-            <KpiCard 
-              title="Connected Machines"
-              value={kpiData?.connectedMachines.value || "28"}
-              trend={kpiData?.connectedMachines.trend || 0}
-              icon={<Database className="h-5 w-5" />}
-              loading={loading}
-              description={kpiData?.connectedMachines.description || "All machines online"}
-            />
-            <Link to="/model-training" className="no-underline">
+            <Link to="/ai-engine" className="no-underline">
               <KpiCard 
-                title="AI Model Training"
-                value={kpiData?.simulations.value || "2"}
-                trend={kpiData?.simulations.trend || 1}
-                icon={<Layers className="h-5 w-5" />}
+                title="AI Engine"
+                value={kpiData?.connectedMachines.value || "97.2%"}
+                trend={kpiData?.connectedMachines.trend || 0}
+                icon={<Cpu className="h-5 w-5" />}
                 loading={loading}
-                description={kpiData?.simulations.description || "MES & Crypto engines"}
+                description="MES Predictor accuracy"
+              />
+            </Link>
+            <Link to="/crypto-engine" className="no-underline">
+              <KpiCard 
+                title="Crypto Engine"
+                value="1.42"
+                trend={1.2}
+                icon={<TrendingUp className="h-5 w-5" />}
+                loading={loading}
+                description="Current Sharpe ratio"
               />
             </Link>
           </div>

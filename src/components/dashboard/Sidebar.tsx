@@ -9,7 +9,9 @@ import {
   Activity, 
   BarChart, 
   Users, 
-  Layers
+  Layers,
+  Cpu,
+  TrendingUp
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -20,6 +22,8 @@ const Sidebar = () => {
     { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
     { icon: BarChart, label: 'Production', href: '/production' },
     { icon: Activity, label: 'AI Insights', href: '/insights' },
+    { icon: Cpu, label: 'AI Engine', href: '/ai-engine' },
+    { icon: TrendingUp, label: 'Crypto Engine', href: '/crypto-engine' },
     { icon: Layers, label: 'Digital Twin', href: '/digital-twin' },
     { icon: Database, label: 'Blockchain', href: '/blockchain' },
     { icon: Users, label: 'Identity', href: '/identity' },

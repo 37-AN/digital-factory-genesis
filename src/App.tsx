@@ -14,6 +14,8 @@ import Identity from "./pages/Identity";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import ModelTraining from "./pages/ModelTraining";
+import AIEngine from "./pages/AIEngine";
+import CryptoEngine from "./pages/CryptoEngine";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +35,8 @@ const App = () => (
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/model-training" element={<ModelTraining />} />
+          <Route path="/ai-engine" element={<AIEngine />} />
+          <Route path="/crypto-engine" element={<CryptoEngine />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
