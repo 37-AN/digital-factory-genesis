@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const SystemArchitecture = () => {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
@@ -101,60 +102,54 @@ const SystemArchitecture = () => {
   return (
     <div className="bg-white dark:bg-factory-blue rounded-lg p-4 shadow h-full">
       <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">System Architecture</h2>
-      <div className="relative w-full h-[400px]">
+      <div className="relative w-full h-[500px]">
         <svg viewBox="0 0 100 100" className="w-full h-full">
           {renderConnections()}
           
           {architectureNodes.map(node => (
-            <g 
-              key={node.id}
-              onMouseEnter={() => setHoveredNode(node.id)}
-              onMouseLeave={() => setHoveredNode(null)}
-              className="cursor-pointer"
-            >
-              <circle
-                cx={`${node.x}%`}
-                cy={`${node.y}%`}
-                r="4"
-                fill={hoveredNode === node.id ? "#00A9A5" : "#1A2942"}
-                className="transition-all duration-300"
-              />
-              <rect
-                x={`${node.x - 10}%`}
-                y={`${node.y + 5}%`}
-                width="20%"
-                height="7%"
-                rx="1"
-                fill={hoveredNode === node.id ? "#00A9A5" : "#1A2942"}
-                fillOpacity={hoveredNode === node.id ? 1 : 0.9}
-                className="transition-all duration-300"
-              />
-              <text
-                x={`${node.x}%`}
-                y={`${node.y + 9}%`}
-                textAnchor="middle"
-                fill="white"
-                fontSize="2.5"
-                className="select-none pointer-events-none"
-              >
-                {node.label}
-              </text>
-              
-              {hoveredNode === node.id && (
-                <foreignObject
-                  x={`${node.x - 15}%`}
-                  y={`${node.y - 15}%`}
-                  width="30%"
-                  height="30%"
-                  className="pointer-events-none"
-                >
-                  <div className="bg-white dark:bg-factory-blue-dark border border-gray-200 dark:border-factory-blue-light rounded-md p-2 shadow-lg text-xs">
-                    <p className="font-bold text-gray-900 dark:text-white">{node.label}</p>
-                    <p className="text-gray-600 dark:text-gray-300">{node.description}</p>
-                  </div>
-                </foreignObject>
-              )}
-            </g>
+            <TooltipProvider key={node.id}>
+              <Tooltip delayDuration={300}>
+                <TooltipTrigger asChild>
+                  <g 
+                    onMouseEnter={() => setHoveredNode(node.id)}
+                    onMouseLeave={() => setHoveredNode(null)}
+                    className="cursor-pointer"
+                  >
+                    <circle
+                      cx={`${node.x}%`}
+                      cy={`${node.y}%`}
+                      r="4.5"
+                      fill={hoveredNode === node.id ? "#00A9A5" : "#1A2942"}
+                      className="transition-all duration-300"
+                    />
+                    <rect
+                      x={`${node.x - 10}%`}
+                      y={`${node.y + 5}%`}
+                      width="20%"
+                      height="7%"
+                      rx="1"
+                      fill={hoveredNode === node.id ? "#00A9A5" : "#1A2942"}
+                      fillOpacity={hoveredNode === node.id ? 1 : 0.9}
+                      className="transition-all duration-300"
+                    />
+                    <text
+                      x={`${node.x}%`}
+                      y={`${node.y + 9}%`}
+                      textAnchor="middle"
+                      fill="white"
+                      fontSize="2.5"
+                      className="select-none pointer-events-none"
+                    >
+                      {node.label}
+                    </text>
+                  </g>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="bg-white dark:bg-factory-blue-dark border border-gray-200 dark:border-factory-blue-light p-2 text-xs shadow-md">
+                  <p className="font-bold text-gray-900 dark:text-white">{node.label}</p>
+                  <p className="text-gray-600 dark:text-gray-300">{node.description}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           ))}
         </svg>
       </div>

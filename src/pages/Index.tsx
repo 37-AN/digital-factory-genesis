@@ -56,7 +56,9 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <SystemArchitecture />
+            <div className="min-h-[550px]">
+              <SystemArchitecture />
+            </div>
             <BlockchainIdentity />
           </div>
           
