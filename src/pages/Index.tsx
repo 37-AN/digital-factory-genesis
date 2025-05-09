@@ -10,9 +10,10 @@ import EngineArchitecture from '../components/dashboard/EngineArchitecture';
 import { BarChart, Activity, Database, Layers } from 'lucide-react';
 import { useDataSimulation } from '@/hooks/useDataSimulation';
 import { generateKpiData } from '@/utils/dataSimulation';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
-  const { data: kpiData, loading } = useDataSimulation(generateKpiData, { interval: 3000 }); // Reduced from 8000ms to 3000ms
+  const { data: kpiData, loading } = useDataSimulation(generateKpiData, { interval: 2000 }); // Reduced from 3000ms to 2000ms
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-factory-blue-dark text-gray-900 dark:text-gray-100">
@@ -46,14 +47,16 @@ const Index = () => {
               loading={loading}
               description={kpiData?.connectedMachines.description || "All machines online"}
             />
-            <KpiCard 
-              title="Digital Twin Simulations"
-              value={kpiData?.simulations.value || "3"}
-              trend={kpiData?.simulations.trend || 1}
-              icon={<Layers className="h-5 w-5" />}
-              loading={loading}
-              description={kpiData?.simulations.description || "2 optimizations running"}
-            />
+            <Link to="/model-training" className="no-underline">
+              <KpiCard 
+                title="AI Model Training"
+                value={kpiData?.simulations.value || "2"}
+                trend={kpiData?.simulations.trend || 1}
+                icon={<Layers className="h-5 w-5" />}
+                loading={loading}
+                description={kpiData?.simulations.description || "MES & Crypto engines"}
+              />
+            </Link>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
