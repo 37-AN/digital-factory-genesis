@@ -6,12 +6,13 @@ import KpiCard from '../components/dashboard/KpiCard';
 import AiInsights from '../components/dashboard/AiInsights';
 import SystemArchitecture from '../components/dashboard/SystemArchitecture';
 import BlockchainIdentity from '../components/dashboard/BlockchainIdentity';
+import EngineArchitecture from '../components/dashboard/EngineArchitecture';
 import { BarChart, Activity, Database, Layers } from 'lucide-react';
 import { useDataSimulation } from '@/hooks/useDataSimulation';
 import { generateKpiData } from '@/utils/dataSimulation';
 
 const Index = () => {
-  const { data: kpiData, loading } = useDataSimulation(generateKpiData, { interval: 8000 });
+  const { data: kpiData, loading } = useDataSimulation(generateKpiData, { interval: 3000 }); // Reduced from 8000ms to 3000ms
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-factory-blue-dark text-gray-900 dark:text-gray-100">
@@ -60,6 +61,10 @@ const Index = () => {
               <SystemArchitecture />
             </div>
             <BlockchainIdentity />
+          </div>
+          
+          <div className="mb-6">
+            <EngineArchitecture />
           </div>
           
           <div className="mb-6">

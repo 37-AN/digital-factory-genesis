@@ -18,8 +18,8 @@ export function useDataSimulation<T>(
   options: SimulationOptions = {}
 ) {
   const {
-    interval = 5000,
-    initialDelay = 1000,
+    interval = 2000, // Reduced from 5000ms to 2000ms for faster updates
+    initialDelay = 500, // Reduced from 1000ms to 500ms for faster initial load
     enabled = true
   } = options;
   
