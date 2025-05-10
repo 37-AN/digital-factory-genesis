@@ -168,16 +168,18 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({ onScan }) => {
         </div>
       </div>
       
-      <style jsx>{`
-        @keyframes scan {
-          0% { transform: translateY(0); }
-          50% { transform: translateY(12rem); }
-          100% { transform: translateY(0); }
-        }
-        .animate-scan {
-          animation: scan 2s linear infinite;
-        }
-      `}</style>
+      <style>
+        {`
+          @keyframes scan {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(12rem); }
+            100% { transform: translateY(0); }
+          }
+          .animate-scan {
+            animation: scan 2s linear infinite;
+          }
+        `}
+      </style>
     </div>
   );
 };
