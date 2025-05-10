@@ -1,22 +1,35 @@
-
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+// Get environment variables with fallbacks
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+// Check if required environment variables are present
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('Missing Supabase environment variables. Please check your .env file or environment configuration.');
+}
 
 // Create a single supabase client for interacting with your database
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder-url.supabase.co',  // Placeholder to prevent runtime errors
+  supabaseAnonKey || 'placeholder-key'                    // Placeholder to prevent runtime errors
+);
 
 // Helper functions for lot tracking and genealogy
 export const lotTracking = {
   // Get all lots
   async getAllLots() {
-    const { data, error } = await supabase
-      .from('lots')
-      .select('*');
-    
-    if (error) throw error;
-    return data;
+    try {
+      const { data, error } = await supabase
+        .from('lots')
+        .select('*');
+      
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error fetching lots:', error);
+      return [];
+    }
   },
   
   // Get a specific lot by ID
