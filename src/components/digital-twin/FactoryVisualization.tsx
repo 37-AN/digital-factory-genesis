@@ -1,10 +1,10 @@
 
 import React, { useRef, useMemo } from 'react';
+import * as THREE from 'three';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Grid } from '@react-three/drei';
 import { Html } from '@react-three/drei';
 import { useDataSimulation } from '@/hooks/useDataSimulation';
-import * as THREE from 'three';
 
 // Define TypeScript interfaces for component props
 interface MachineProps {
@@ -176,6 +176,10 @@ const Factory = ({ running = false }: FactoryProps) => {
       <Conveyor startPos={machinePositions[0]} endPos={machinePositions[1]} />
       <Conveyor startPos={machinePositions[1]} endPos={machinePositions[2]} />
       <Conveyor startPos={machinePositions[2]} endPos={machinePositions[3]} />
+      
+      {/* Lights */}
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 10]} intensity={1} />
     </>
   );
 };
@@ -188,8 +192,6 @@ const FactoryVisualization = ({ running = false }: FactoryVisualizationProps) =>
   return (
     <div className="h-full w-full">
       <Canvas camera={{ position: [0, 5, 10], fov: 50 }}>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[10, 10, 10]} intensity={1} />
         <Factory running={running} />
         <OrbitControls 
           enablePan={true} 
