@@ -1,19 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Get environment variables with fallbacks
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-// Check if required environment variables are present
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Missing Supabase environment variables. Please check your .env file or environment configuration.');
-}
+// Use hardcoded values for the Supabase client
+const supabaseUrl = 'https://eimtietrpmelrxdszbmh.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpbXRpZXRycG1lbHJ4ZHN6Ym1oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0NTI1NDEsImV4cCI6MjA2MjAyODU0MX0.YpxerY_YNtQ31SDrC-0Sm7YsZ8lzFsXdcuDNDUC4x6Q';
 
 // Create a single supabase client for interacting with your database
-export const supabase = createClient(
-  supabaseUrl || 'https://placeholder-url.supabase.co',  // Placeholder to prevent runtime errors
-  supabaseAnonKey || 'placeholder-key'                    // Placeholder to prevent runtime errors
-);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Helper functions for lot tracking and genealogy
 export const lotTracking = {

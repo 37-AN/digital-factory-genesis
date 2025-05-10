@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Header from '../components/dashboard/Header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,8 +9,16 @@ import { Database, Server, Shield, FileCode, Network } from 'lucide-react';
 import BlockchainCode from '@/components/blockchain/BlockchainCode';
 import ConsortiumNetwork from '@/components/blockchain/ConsortiumNetwork';
 import AIFeedbackSystem from '@/components/blockchain/AIFeedbackSystem';
+import BlockchainTransactionList from '@/components/blockchain/BlockchainTransactionList';
+import BlockchainDataDisplay from '@/components/blockchain/BlockchainDataDisplay';
+import { initializeBlockchainData } from '@/utils/blockchainSimulation';
 
 const BlockchainArchitecture = () => {
+  // Initialize blockchain data when the page loads
+  useEffect(() => {
+    initializeBlockchainData();
+  }, []);
+
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-factory-blue-dark text-gray-900 dark:text-gray-100">
       <Sidebar />
@@ -20,6 +28,13 @@ const BlockchainArchitecture = () => {
         
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-4">
           <h1 className="text-xl font-bold mb-4">Blockchain Network Architecture</h1>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+            <BlockchainTransactionList />
+            <div className="lg:col-span-2">
+              <BlockchainDataDisplay />
+            </div>
+          </div>
           
           <Tabs defaultValue="network" className="w-full">
             <TabsList className="w-full mb-6 grid grid-cols-4 gap-2">

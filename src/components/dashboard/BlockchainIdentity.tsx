@@ -1,18 +1,33 @@
 
 import React, { useState, useEffect } from 'react';
 import { Check, Search } from 'lucide-react';
+import { useBlockchainData, Machine, ProductionBatch } from '@/utils/blockchainSimulation';
 
 const BlockchainIdentity = () => {
   const [loadingId, setLoadingId] = useState(true);
   const [loadingMachines, setLoadingMachines] = useState(true);
   const [loadingBatches, setLoadingBatches] = useState(true);
-  const [verifiedItems, setVerifiedItems] = useState<Record<string, boolean>>({});
+  const [machines, setMachines] = useState<Machine[]>([]);
+  const [batches, setBatches] = useState<ProductionBatch[]>([]);
+  const blockchainData = useBlockchainData();
 
   useEffect(() => {
     // Simulate loading states
-    const timer1 = setTimeout(() => setLoadingId(false), 1200);
-    const timer2 = setTimeout(() => setLoadingMachines(false), 2000);
-    const timer3 = setTimeout(() => setLoadingBatches(false), 3000);
+    const timer1 = setTimeout(() => {
+      setLoadingId(false);
+    }, 1200);
+    
+    const timer2 = setTimeout(() => {
+      const data = blockchainData.getBlockchainData();
+      setMachines(data.machines);
+      setLoadingMachines(false);
+    }, 2000);
+    
+    const timer3 = setTimeout(() => {
+      const data = blockchainData.getBlockchainData();
+      setBatches(data.batches);
+      setLoadingBatches(false);
+    }, 3000);
     
     return () => {
       clearTimeout(timer1);
@@ -21,19 +36,14 @@ const BlockchainIdentity = () => {
     };
   }, []);
 
-  const machines = [
-    { id: '0x72F8...9A3B', name: 'CNC Mill #103', lastMaintenance: '2023-04-15', status: 'Active' },
-    { id: '0x91A3...F721', name: 'Robotic Arm #47', lastMaintenance: '2023-05-02', status: 'Maintenance' },
-    { id: '0x45D1...8E32', name: 'Assembly Line #2', lastMaintenance: '2023-04-28', status: 'Active' },
-  ];
-
-  const batches = [
-    { id: '0xBF72...1D43', product: 'Engine Block', quantity: 250, date: '2023-05-01', status: 'Completed' },
-    { id: '0x31E8...7A92', product: 'Transmission', quantity: 150, date: '2023-05-03', status: 'In Progress' },
-  ];
-
-  const verifyItem = (id: string) => {
-    setVerifiedItems(prev => ({ ...prev, [id]: true }));
+  const verifyItem = (type: 'machine' | 'batch', id: string) => {
+    if (type === 'machine') {
+      const updatedMachines = blockchainData.verifyBlockchainItem('machine', id);
+      setMachines(updatedMachines);
+    } else {
+      const updatedBatches = blockchainData.verifyBlockchainItem('batch', id);
+      setBatches(updatedBatches);
+    }
   };
 
   return (
@@ -108,17 +118,19 @@ const BlockchainIdentity = () => {
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         machine.status === 'Active' 
                           ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' 
-                          : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
+                          : machine.status === 'Maintenance'
+                          ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
+                          : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
                       }`}>
                         {machine.status}
                       </span>
-                      {verifiedItems[machine.id] ? (
+                      {machine.verified ? (
                         <span className="text-xs bg-factory-teal-dark/20 text-factory-teal px-2 py-1 rounded-full flex items-center">
                           <Check className="h-3 w-3 mr-1" /> Verified
                         </span>
                       ) : (
                         <button 
-                          onClick={() => verifyItem(machine.id)} 
+                          onClick={() => verifyItem('machine', machine.id)} 
                           className="text-xs bg-gray-100 dark:bg-factory-blue-light text-gray-600 dark:text-gray-300 px-2 py-1 rounded-full flex items-center hover:bg-gray-200 dark:hover:bg-factory-blue transition-colors"
                         >
                           <Search className="h-3 w-3 mr-1" /> Verify
@@ -163,17 +175,19 @@ const BlockchainIdentity = () => {
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         batch.status === 'Completed' 
                           ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' 
-                          : 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
+                          : batch.status === 'In Progress'
+                          ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
+                          : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300'
                       }`}>
                         {batch.status}
                       </span>
-                      {verifiedItems[batch.id] ? (
+                      {batch.verified ? (
                         <span className="text-xs bg-factory-teal-dark/20 text-factory-teal px-2 py-1 rounded-full flex items-center">
                           <Check className="h-3 w-3 mr-1" /> Verified
                         </span>
                       ) : (
                         <button 
-                          onClick={() => verifyItem(batch.id)} 
+                          onClick={() => verifyItem('batch', batch.id)} 
                           className="text-xs bg-gray-100 dark:bg-factory-blue-light text-gray-600 dark:text-gray-300 px-2 py-1 rounded-full flex items-center hover:bg-gray-200 dark:hover:bg-factory-blue transition-colors"
                         >
                           <Search className="h-3 w-3 mr-1" /> Verify
