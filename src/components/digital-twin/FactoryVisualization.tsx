@@ -58,7 +58,7 @@ const Machine = ({
   return (
     <group position={position}>
       {/* Base cylinder */}
-      <mesh position={[0, -0.6, 0]}>
+      <mesh position={[0, -0.6, 0] as [number, number, number]}>
         <cylinderGeometry args={[1, 1, 0.2, 32]} />
         <meshStandardMaterial color="#475569" />
       </mesh>
@@ -70,7 +70,7 @@ const Machine = ({
       </mesh>
       
       {/* Status indicator */}
-      <mesh position={[0, 0.8, 0]}>
+      <mesh position={[0, 0.8, 0] as [number, number, number]}>
         <cylinderGeometry args={[0.1, 0.1, 0.3, 8]} />
         <meshStandardMaterial 
           color={statusColor} 
@@ -80,7 +80,7 @@ const Machine = ({
       </mesh>
       
       {/* Label */}
-      <Html position={[0, 1.5, 0]} transform>
+      <Html position={[0, 1.5, 0] as [number, number, number]} transform>
         <div className="bg-white dark:bg-factory-blue px-2 py-1 rounded-md text-xs shadow-md">
           <p className="font-bold">{name}</p>
           <p className="text-xs opacity-80">Efficiency: {efficiency}%</p>
@@ -108,8 +108,8 @@ const Conveyor = ({ startPos, endPos, width = 0.5 }: ConveyorProps) => {
   
   return (
     <mesh 
-      position={[centerX, centerY, centerZ]}
-      rotation={[0, angle, 0]}
+      position={[centerX, centerY, centerZ] as [number, number, number]}
+      rotation={[0, angle, 0] as [number, number, number]}
     >
       <boxGeometry args={[length, 0.1, width]} />
       <meshStandardMaterial color="#94a3b8" />
@@ -179,7 +179,7 @@ const Factory = ({ running = false }: FactoryProps) => {
       
       {/* Lights */}
       <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 10]} intensity={1} />
+      <directionalLight position={[10, 10, 10] as [number, number, number]} intensity={1} />
     </>
   );
 };
@@ -191,7 +191,7 @@ interface FactoryVisualizationProps {
 const FactoryVisualization = ({ running = false }: FactoryVisualizationProps) => {
   return (
     <div className="h-full w-full">
-      <Canvas camera={{ position: [0, 5, 10], fov: 50 }}>
+      <Canvas camera={{ position: [0, 5, 10] as [number, number, number], fov: 50 }}>
         <Factory running={running} />
         <OrbitControls 
           enablePan={true} 
