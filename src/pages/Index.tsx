@@ -7,7 +7,7 @@ import AiInsights from '../components/dashboard/AiInsights';
 import SystemArchitecture from '../components/dashboard/SystemArchitecture';
 import BlockchainIdentity from '../components/dashboard/BlockchainIdentity';
 import EngineArchitecture from '../components/dashboard/EngineArchitecture';
-import { BarChart, Activity, Database, Layers, Cpu, TrendingUp } from 'lucide-react';
+import { BarChart, Activity, Database, QrCode, Cpu, TrendingUp } from 'lucide-react';
 import { useDataSimulation } from '@/hooks/useDataSimulation';
 import { generateKpiData } from '@/utils/dataSimulation';
 import { Link } from 'react-router-dom';
@@ -65,7 +65,34 @@ const Index = () => {
             <div className="min-h-[550px]">
               <SystemArchitecture />
             </div>
-            <BlockchainIdentity />
+            <div className="grid grid-cols-1 gap-6">
+              <BlockchainIdentity />
+              <Link to="/lot-genealogy" className="no-underline">
+                <div className="bg-white dark:bg-factory-blue rounded-lg shadow p-6 cursor-pointer hover:shadow-lg transition-shadow">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-bold text-lg mb-2">AI-Enhanced Lot Genealogy</h3>
+                      <p className="text-gray-600 dark:text-gray-300 text-sm">
+                        Track production batches through their entire lifecycle with AI-powered barcode scanning
+                      </p>
+                    </div>
+                    <div className="p-3 bg-factory-teal bg-opacity-20 rounded-full">
+                      <QrCode className="h-6 w-6 text-factory-teal" />
+                    </div>
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                    <div className="flex flex-col">
+                      <span className="text-gray-500 dark:text-gray-400">Active Lots</span>
+                      <span className="font-medium">128</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-gray-500 dark:text-gray-400">Scan Accuracy</span>
+                      <span className="font-medium">98.7%</span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
           </div>
           
           <div className="mb-6">

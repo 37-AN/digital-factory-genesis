@@ -16,6 +16,7 @@ import Settings from "./pages/Settings";
 import ModelTraining from "./pages/ModelTraining";
 import AIEngine from "./pages/AIEngine";
 import CryptoEngine from "./pages/CryptoEngine";
+import LotGenealogy from "./pages/LotGenealogy";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/model-training" element={<ModelTraining />} />
           <Route path="/ai-engine" element={<AIEngine />} />
           <Route path="/crypto-engine" element={<CryptoEngine />} />
+          <Route path="/lot-genealogy" element={<LotGenealogy />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -11,7 +10,8 @@ import {
   Users, 
   Layers,
   Cpu,
-  TrendingUp
+  TrendingUp,
+  QrCode
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -24,6 +24,7 @@ const Sidebar = () => {
     { icon: Activity, label: 'AI Insights', href: '/insights' },
     { icon: Cpu, label: 'AI Engine', href: '/ai-engine' },
     { icon: TrendingUp, label: 'Crypto Engine', href: '/crypto-engine' },
+    { icon: QrCode, label: 'Lot Genealogy', href: '/lot-genealogy' },
     { icon: Layers, label: 'Digital Twin', href: '/digital-twin' },
     { icon: Database, label: 'Blockchain', href: '/blockchain' },
     { icon: Users, label: 'Identity', href: '/identity' },
