@@ -8,6 +8,8 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { lotTracking } from '@/lib/supabase';
+import { toast } from '@/components/ui/use-toast';
 
 interface QualityChecksProps {
   lotId: string;
@@ -36,14 +38,39 @@ const QualityChecks: React.FC<QualityChecksProps> = ({ lotId, onSubmit }) => {
     form.setValue('lotId', lotId);
   }, [lotId, form]);
   
-  function handleSubmit(values: z.infer<typeof formSchema>) {
-    onSubmit(values);
-    form.reset({
-      lotId: lotId,
-      checkType: "",
-      result: "",
-      notes: "",
-    });
+  async function handleSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      // Record the quality check in the database
+      await lotTracking.recordQualityCheck({
+        lot_id: values.lotId,
+        check_type: values.checkType,
+        result: values.result,
+        notes: values.notes
+      });
+      
+      // Pass the data to the parent component
+      onSubmit(values);
+      
+      toast({
+        title: "Quality Check Recorded",
+        description: `Check for Lot ${values.lotId} has been saved to database`,
+      });
+      
+      // Reset the form
+      form.reset({
+        lotId: lotId,
+        checkType: "",
+        result: "",
+        notes: "",
+      });
+    } catch (error) {
+      console.error("Error recording quality check:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to record quality check in database"
+      });
+    }
   }
   
   return (

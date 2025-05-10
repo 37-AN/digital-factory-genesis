@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Camera, Upload, RefreshCw } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
+import { lotTracking } from '@/lib/supabase';
 
 interface BarcodeScannerProps {
   onScan: (result: string) => void;
@@ -22,20 +23,41 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({ onScan }) => {
     }, 2000);
   };
   
-  const simulateScan = () => {
+  const simulateScan = async () => {
     setIsProcessing(true);
     // Simulate AI processing time
-    setTimeout(() => {
+    setTimeout(async () => {
       const sampleLotIds = ['LOT-2025-0001', 'LOT-2025-0002', 'LOT-2025-0003'];
       const randomLot = sampleLotIds[Math.floor(Math.random() * sampleLotIds.length)];
       
-      onScan(randomLot);
-      setIsScanning(false);
-      setIsProcessing(false);
+      try {
+        // Record the scan in the database
+        await lotTracking.recordScan({
+          lot_id: randomLot,
+          station_id: 'STATION-001',
+          operator_id: 'OP-001'
+        });
+        
+        onScan(randomLot);
+        toast({
+          title: "Scan Recorded",
+          description: `Lot ${randomLot} scan has been saved to database`,
+        });
+      } catch (error) {
+        console.error("Error recording scan:", error);
+        toast({
+          variant: "destructive",
+          title: "Scan Error",
+          description: "Failed to record scan in database"
+        });
+      } finally {
+        setIsScanning(false);
+        setIsProcessing(false);
+      }
     }, 1500);
   };
   
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
     
@@ -52,16 +74,39 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({ onScan }) => {
     setIsProcessing(true);
     
     // Simulate processing the uploaded image
-    setTimeout(() => {
+    setTimeout(async () => {
       const sampleLotIds = ['LOT-2025-0001', 'LOT-2025-0002', 'LOT-2025-0003'];
       const randomLot = sampleLotIds[Math.floor(Math.random() * sampleLotIds.length)];
       
-      onScan(randomLot);
-      setIsProcessing(false);
-      
-      // Reset the file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+      try {
+        // In a real implementation, we would upload the image to storage
+        // and get the URL to store in the database
+        await lotTracking.recordScan({
+          lot_id: randomLot,
+          station_id: 'STATION-001',
+          operator_id: 'OP-001',
+          image_url: 'https://example.com/uploaded-image.jpg' // Placeholder
+        });
+        
+        onScan(randomLot);
+        toast({
+          title: "Image Processed",
+          description: `Lot ${randomLot} identified and scan recorded`,
+        });
+      } catch (error) {
+        console.error("Error processing image:", error);
+        toast({
+          variant: "destructive",
+          title: "Processing Error",
+          description: "Failed to process the uploaded image"
+        });
+      } finally {
+        setIsProcessing(false);
+        
+        // Reset the file input
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
       }
     }, 2000);
   };
@@ -123,8 +168,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({ onScan }) => {
         </div>
       </div>
       
-      <style>
-        {`
+      <style jsx>{`
         @keyframes scan {
           0% { transform: translateY(0); }
           50% { transform: translateY(12rem); }
@@ -133,8 +177,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({ onScan }) => {
         .animate-scan {
           animation: scan 2s linear infinite;
         }
-        `}
-      </style>
+      `}</style>
     </div>
   );
 };
