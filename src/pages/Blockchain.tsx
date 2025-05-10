@@ -1,12 +1,13 @@
-
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Sidebar from '../components/dashboard/Sidebar';
 import Header from '../components/dashboard/Header';
 import KpiCard from '../components/dashboard/KpiCard';
-import { Database, FileCheck, FileSearch, Shield, ShieldCheck } from 'lucide-react';
+import { Database, FileCheck, FileSearch, Shield, ShieldCheck, Server } from 'lucide-react';
 import { useDataSimulation } from '@/hooks/useDataSimulation';
 import { generateBlockchainTransactions } from '@/utils/dataSimulation';
 import { toast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 
 const Blockchain = () => {
   const [productId, setProductId] = useState('');
@@ -64,7 +65,15 @@ const Blockchain = () => {
         <Header />
         
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-4">
-          <h1 className="text-xl font-bold mb-4">Blockchain Traceability</h1>
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-xl font-bold">Blockchain Traceability</h1>
+            <Link to="/blockchain-architecture">
+              <Button variant="outline" className="flex items-center">
+                <Server className="mr-2 h-4 w-4" />
+                View Network Architecture
+              </Button>
+            </Link>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <KpiCard 

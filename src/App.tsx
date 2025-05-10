@@ -10,6 +10,7 @@ import Production from "./pages/Production";
 import AIInsights from "./pages/AIInsights";
 import DigitalTwin from "./pages/DigitalTwin";
 import Blockchain from "./pages/Blockchain";
+import BlockchainArchitecture from "./pages/BlockchainArchitecture";
 import Identity from "./pages/Identity";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/insights" element={<AIInsights />} />
           <Route path="/digital-twin" element={<DigitalTwin />} />
           <Route path="/blockchain" element={<Blockchain />} />
+          <Route path="/blockchain-architecture" element={<BlockchainArchitecture />} />
           <Route path="/identity" element={<Identity />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/settings" element={<Settings />} />
