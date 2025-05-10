@@ -163,7 +163,7 @@ const Factory = ({ running = false }: FactoryProps) => {
         sectionThickness={1}
         sectionColor="#475569"
         fadeDistance={30}
-        position={[0, -0.5, 0]}
+        position={[0, -0.5, 0] as [number, number, number]}
       />
       
       {/* Factory machines */}
