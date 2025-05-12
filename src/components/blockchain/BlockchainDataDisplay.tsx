@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useBlockchainData, LotData, QAResult, ScanEvent } from '@/utils/blockchainSimulation';
+import { useBlockchainData, LotData, QAResult, ScanEvent } from '@/utils/blockchain';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useBlockchainData, BlockchainTransaction } from '@/utils/blockchainSimulation';
+import { useBlockchainData, BlockchainTransaction } from '@/utils/blockchain';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Clock, RefreshCcw } from 'lucide-react';

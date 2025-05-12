@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Check, Search } from 'lucide-react';
-import { useBlockchainData, Machine, ProductionBatch } from '@/utils/blockchainSimulation';
+import { useBlockchainData, Machine, ProductionBatch } from '@/utils/blockchain';
 
 const BlockchainIdentity = () => {
   const [loadingId, setLoadingId] = useState(true);

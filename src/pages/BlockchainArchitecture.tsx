@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Header from '../components/dashboard/Header';
@@ -11,7 +10,7 @@ import ConsortiumNetwork from '@/components/blockchain/ConsortiumNetwork';
 import AIFeedbackSystem from '@/components/blockchain/AIFeedbackSystem';
 import BlockchainTransactionList from '@/components/blockchain/BlockchainTransactionList';
 import BlockchainDataDisplay from '@/components/blockchain/BlockchainDataDisplay';
-import { initializeBlockchainData } from '@/utils/blockchainSimulation';
+import { initializeBlockchainData } from '@/utils/blockchain';
 
 const BlockchainArchitecture = () => {
   // Initialize blockchain data when the page loads
