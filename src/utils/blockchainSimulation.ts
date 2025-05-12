@@ -1,3 +1,5 @@
+
+import React from 'react';
 import { generateBlockchainTransactions } from './dataSimulation';
 
 // Define types for blockchain data

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useBlockchainData, BlockchainTransaction } from '@/utils/blockchainSimulation';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
