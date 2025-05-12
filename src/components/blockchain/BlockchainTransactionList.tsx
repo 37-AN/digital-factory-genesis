@@ -25,16 +25,16 @@ const BlockchainTransactionList = () => {
     
     // Simulate new transaction every 30 seconds
     const interval = setInterval(() => {
-      const newTransactions = simulateNewTransaction();
+      const newTransactions = simulateNewTransaction("Automatic");
       setTransactions(newTransactions);
     }, 30000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [getBlockchainData, simulateNewTransaction]);
 
   const handleRefresh = () => {
     setRefreshing(true);
-    const newTransactions = simulateNewTransaction();
+    const newTransactions = simulateNewTransaction("Manual");
     setTransactions(newTransactions);
     
     toast({

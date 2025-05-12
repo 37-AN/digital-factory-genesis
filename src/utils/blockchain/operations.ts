@@ -2,7 +2,7 @@
 import { BlockchainTransaction, Machine, ProductionBatch, LotData, QAResult, ScanEvent, isMachine, isProductionBatch } from './types';
 import { getBlockchainData, updateBlockchainData } from './storage';
 
-export const simulateNewTransaction = (type: string): BlockchainTransaction => {
+export const simulateNewTransaction = (type: string): BlockchainTransaction[] => {
   const id = Math.random().toString(36).substring(2, 10).toUpperCase();
   const block = Math.floor(Math.random() * 1000000).toString(16).toUpperCase();
   
@@ -15,12 +15,14 @@ export const simulateNewTransaction = (type: string): BlockchainTransaction => {
   };
   
   const data = getBlockchainData();
+  const updatedTransactions = [transaction, ...data.transactions].slice(0, 30);
+  
   updateBlockchainData({
     ...data,
-    transactions: [transaction, ...data.transactions].slice(0, 30)
+    transactions: updatedTransactions
   });
   
-  return transaction;
+  return updatedTransactions;
 };
 
 export const verifyBlockchainItem = (item: Machine | ProductionBatch): Machine | ProductionBatch => {
