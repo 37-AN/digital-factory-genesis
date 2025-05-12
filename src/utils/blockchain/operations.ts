@@ -1,35 +1,55 @@
-import { generateBlockchainTransactions } from '../dataSimulation';
-import { getStorageItem, setStorageItem, STORAGE_KEYS, getBlockchainData } from './storage';
-import { Machine, ProductionBatch } from './types';
 
-// Simulate new transaction
-export function simulateNewTransaction() {
-  const transactions = getStorageItem(STORAGE_KEYS.TRANSACTIONS, []);
-  const newTransactions = generateBlockchainTransactions(1);
-  
-  transactions.unshift(newTransactions[0]); // Add new transaction at the beginning
-  
-  // Keep only the most recent transactions
-  if (transactions.length > 50) {
-    transactions.pop();
-  }
-  
-  setStorageItem(STORAGE_KEYS.TRANSACTIONS, transactions);
-  return transactions;
-}
+import { BlockchainTransaction, Machine, ProductionBatch, LotData, QAResult, ScanEvent, isMachine, isProductionBatch } from './types';
+import { getBlockchainData, updateBlockchainData } from './storage';
 
-// Verify a blockchain item (machine or production batch)
-export function verifyBlockchainItem(type: 'machine' | 'batch', id: string) {
-  const key = type === 'machine' ? STORAGE_KEYS.MACHINES : STORAGE_KEYS.BATCHES;
-  const items = getStorageItem(key, []);
+export const simulateNewTransaction = (type: string): BlockchainTransaction => {
+  const id = Math.random().toString(36).substring(2, 10).toUpperCase();
+  const block = Math.floor(Math.random() * 1000000).toString(16).toUpperCase();
   
-  const updatedItems = items.map((item: Machine | ProductionBatch) => {
-    if (item.id === id) {
-      return { ...item, verified: true };
-    }
-    return item;
+  const transaction: BlockchainTransaction = {
+    id: `TX-${id}`,
+    type,
+    timestamp: new Date().toISOString(),
+    status: Math.random() > 0.2 ? "Confirmed" : "Pending",
+    block: `0x${block}`
+  };
+  
+  const data = getBlockchainData();
+  updateBlockchainData({
+    ...data,
+    transactions: [transaction, ...data.transactions].slice(0, 30)
   });
   
-  setStorageItem(key, updatedItems);
-  return updatedItems;
-}
+  return transaction;
+};
+
+export const verifyBlockchainItem = (item: Machine | ProductionBatch): Machine | ProductionBatch => {
+  const data = getBlockchainData();
+  
+  if (isMachine(item)) {
+    const updatedMachines = data.machines.map(machine => 
+      machine.id === item.id ? { ...machine, verified: true } : machine
+    );
+    
+    updateBlockchainData({
+      ...data,
+      machines: updatedMachines
+    });
+    
+    return { ...item, verified: true };
+  } 
+  else if (isProductionBatch(item)) {
+    const updatedBatches = data.batches.map(batch => 
+      batch.id === item.id ? { ...batch, verified: true } : batch
+    );
+    
+    updateBlockchainData({
+      ...data,
+      batches: updatedBatches
+    });
+    
+    return { ...item, verified: true };
+  }
+  
+  return item;
+};

@@ -50,3 +50,12 @@ export interface ScanEvent {
   stationId: string;
   imageHash: string;
 }
+
+// Helper functions for type checking
+export function isMachine(item: Machine | ProductionBatch): item is Machine {
+  return 'name' in item && 'lastMaintenance' in item;
+}
+
+export function isProductionBatch(item: Machine | ProductionBatch): item is ProductionBatch {
+  return 'product' in item && 'quantity' in item;
+}
