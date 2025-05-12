@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useBlockchainData, BlockchainTransaction } from '@/utils/blockchainSimulation';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -10,12 +11,12 @@ const BlockchainTransactionList = () => {
   const [transactions, setTransactions] = useState<BlockchainTransaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const blockchainData = useBlockchainData();
+  const { getBlockchainData, simulateNewTransaction } = useBlockchainData();
   const { toast } = useToast();
 
   useEffect(() => {
     const fetchData = () => {
-      const data = blockchainData.getBlockchainData();
+      const data = getBlockchainData();
       setTransactions(data.transactions);
       setLoading(false);
     };
@@ -24,7 +25,7 @@ const BlockchainTransactionList = () => {
     
     // Simulate new transaction every 30 seconds
     const interval = setInterval(() => {
-      const newTransactions = blockchainData.simulateNewTransaction();
+      const newTransactions = simulateNewTransaction();
       setTransactions(newTransactions);
     }, 30000);
 
@@ -33,7 +34,7 @@ const BlockchainTransactionList = () => {
 
   const handleRefresh = () => {
     setRefreshing(true);
-    const newTransactions = blockchainData.simulateNewTransaction();
+    const newTransactions = simulateNewTransaction();
     setTransactions(newTransactions);
     
     toast({

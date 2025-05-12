@@ -231,6 +231,7 @@ export function verifyBlockchainItem(type: 'machine' | 'batch', id: string) {
 
 // Create a custom hook for working with blockchain data
 export function useBlockchainData() {
+  // Fixed: Properly use React.useEffect instead of directly referencing useEffect
   React.useEffect(() => {
     initializeBlockchainData();
   }, []);
