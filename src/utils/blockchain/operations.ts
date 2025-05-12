@@ -1,6 +1,6 @@
 
 import { BlockchainTransaction, Machine, ProductionBatch, LotData, QAResult, ScanEvent, isMachine, isProductionBatch } from './types';
-import { getBlockchainData, updateBlockchainData } from './storage';
+import { getBlockchainData, updateBlockchainData, STORAGE_KEYS } from './storage';
 
 export const simulateNewTransaction = (type: string): BlockchainTransaction[] => {
   const id = Math.random().toString(36).substring(2, 10).toUpperCase();
@@ -17,10 +17,7 @@ export const simulateNewTransaction = (type: string): BlockchainTransaction[] =>
   const data = getBlockchainData();
   const updatedTransactions = [transaction, ...data.transactions].slice(0, 30);
   
-  updateBlockchainData({
-    ...data,
-    transactions: updatedTransactions
-  });
+  updateBlockchainData(STORAGE_KEYS.TRANSACTIONS, updatedTransactions);
   
   return updatedTransactions;
 };
@@ -33,10 +30,7 @@ export const verifyBlockchainItem = (item: Machine | ProductionBatch): Machine |
       machine.id === item.id ? { ...machine, verified: true } : machine
     );
     
-    updateBlockchainData({
-      ...data,
-      machines: updatedMachines
-    });
+    updateBlockchainData(STORAGE_KEYS.MACHINES, updatedMachines);
     
     return { ...item, verified: true };
   } 
@@ -45,10 +39,7 @@ export const verifyBlockchainItem = (item: Machine | ProductionBatch): Machine |
       batch.id === item.id ? { ...batch, verified: true } : batch
     );
     
-    updateBlockchainData({
-      ...data,
-      batches: updatedBatches
-    });
+    updateBlockchainData(STORAGE_KEYS.BATCHES, updatedBatches);
     
     return { ...item, verified: true };
   }

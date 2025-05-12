@@ -42,7 +42,7 @@ export function getBlockchainData() {
 }
 
 // Update blockchain data
-export function updateBlockchainData<T>(key: string, data: T) {
+export function updateBlockchainData<T>(key: string, data: T): void {
   setStorageItem(key, data);
 }
 
